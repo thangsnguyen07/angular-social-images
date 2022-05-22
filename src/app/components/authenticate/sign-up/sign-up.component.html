@@ -1,0 +1,53 @@
+<div class="col-sm-6">
+  <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        aria-describedby="emailHelp"
+        formControlName="email"
+        [ngClass]="{ 'invalid-input': email.invalid && email.touched }"
+      />
+      <div id="emailHelp" class="form-text">
+        We'll never share your email with anyone else.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        formControlName="password"
+        [ngClass]="{ 'invalid-input': password.invalid && password.touched }"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        formControlName="confirmPassword"
+        [ngClass]="{
+          'invalid-input': confirmPassword.invalid && confirmPassword.touched
+        }"
+      />
+      <!-- <span *ngIf="confirmPassword.invalid && confirmPassword.touched"
+        >Password is required</span
+      > -->
+    </div>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="signUpForm.invalid"
+    >
+      Submit
+    </button>
+  </form>
+</div>
