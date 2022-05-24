@@ -3,12 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
 import { SignInComponent } from './components/authenticate/sign-in/sign-in.component';
 import { SignUpComponent } from './components/authenticate/sign-up/sign-up.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { LayoutComponent } from './components/layout/layout.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // AUTO GENERATE
 // import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
@@ -22,19 +20,35 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 import { environment } from '../environments/environment';
 import { AuthService } from './services/auth.service';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { PostService } from './services/post.service';
 
+import { NgxMasonryModule } from 'ngx-masonry';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PostCardComponent } from './components/home/post-card/post-card.component';
+import { PostComponent } from './components/post/post.component';
+import { PostDetailComponent } from './components/post/post-detail/post-detail.component';
+import { AutosizeModule } from 'ngx-autosize';
+import { PostComment } from './components/post/post-detail/post-comment/post-comment.component';
+import { PostCommentItemComponent } from './components/post/post-detail/post-comment/post-comment-item/post-comment-item.component';
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     HomeComponent,
     SignInComponent,
     SignUpComponent,
-    LayoutComponent,
+    NavBarComponent,
+    PostCardComponent,
+    PostComponent,
+    PostDetailComponent,
+    PostComment,
+    PostCommentItemComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
 
     // AUTO GENERATE
@@ -45,9 +59,15 @@ import { AuthService } from './services/auth.service';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    // AngularFireStorageModule,
+
+    FontAwesomeModule,
+
+    NgxMasonryModule,
+    BrowserAnimationsModule,
+    // Auto resize input
+    AutosizeModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, PostService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

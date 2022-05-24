@@ -1,0 +1,76 @@
+<div
+  class="fixed top-0 flex items-center w-full p-4 bg-orange-500 h-[72px] z-50"
+>
+  <nav class="flex items-center justify-between w-full">
+    <div>Logo</div>
+
+    <!-- Search  -->
+    <div class="justify-center hidden md:flex">
+      <div class="xl:w-96">
+        <div class="relative flex items-stretch w-full input-group">
+          <input
+            type="search"
+            class="form-control relative flex-auto min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            placeholder="Search"
+            aria-label="Search"
+            aria-describedby="button-addon2"
+          />
+          <button
+            class="btn px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center"
+            type="button"
+            id="button-addon2"
+          >
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              data-prefix="fas"
+              data-icon="search"
+              class="w-4"
+              role="img"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 512 512"
+            >
+              <path
+                fill="currentColor"
+                d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-center hidden space-x-3 md:flex">
+      <div class="w-8 h-8">
+        <img
+          class="rounded-full"
+          src="https://m.media-amazon.com/images/I/81tpy7oo+EL._SS500_.jpg"
+          alt=""
+        />
+      </div>
+
+      <a class="cursor-pointer hover:underline" (click)="signOut()">Sign out</a>
+    </div>
+
+    <span class="md:hidden" (click)="toggleSidebar()">
+      <fa-icon class="text-xl" [icon]="faBars"></fa-icon>
+    </span>
+  </nav>
+
+  <!-- Sidebar -->
+  <div
+    [ngClass]="!isOpenSidebar ? '-translate-x-full' : 'translate-x-0'"
+    class="h-full fixed inset-0 w-[300px] bg-black z-20 flex flex-col transition-all duration-300"
+  >
+    <div class="flex-1">header</div>
+    <div class="flex-4">body</div>
+    <div class="flex-1">footer</div>
+  </div>
+
+  <!-- Overlay when sidebar is open -->
+  <div
+    (click)="toggleSidebar()"
+    [ngClass]="!isOpenSidebar ? 'hidden' : 'block'"
+    class="fixed inset-0 z-10 bg-black/80"
+  ></div>
+</div>

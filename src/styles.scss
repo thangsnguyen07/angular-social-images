@@ -1,1 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+* {
+    font-family:'Quicksand', sans-serif !important;
+}
+
+@layer components {
+    .form-control {
+      @apply px-3 py-1 border border-orange-500 rounded-md outline-orange-500;
+    }
+
+    .form-group {
+        @apply flex flex-col mb-3;
+    }
+
+    .btn {
+        @apply px-3 py-2 font-medium text-white  rounded-md ;
+    }
+
+    .btn-primary {
+        @apply bg-orange-500 hover:bg-orange-600 active:hover:border-orange-600;
+    }
+
+    .tooltip {
+        @apply invisible absolute;
+      }
+      
+      .has-tooltip:hover .tooltip {
+        @apply visible z-50;
+      }
+  }
+

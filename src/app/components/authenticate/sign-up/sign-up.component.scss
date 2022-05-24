@@ -1,3 +1,17 @@
+.bg-image {
+    background: linear-gradient(
+      rgba(0, 0, 0, 0.5), 
+      rgba(0, 0, 0, 0.5)
+    ),
+    url('https://images.pexels.com/photos/2480072/pexels-photo-2480072.jpeg?cs=srgb&dl=pexels-jo%C3%A3o-jesus-2480072.jpg&fm=jpg');
+    background-position: center;
+    background-size: cover;
+}
+
+fa-icon {
+    font-size: 30px;
+}
+
 .invalid-input {
-    border-color: red;
+    border-color: red !important;
 }

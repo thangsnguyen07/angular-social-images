@@ -6,7 +6,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { User } from './user';
+import { User } from '../types/user';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +25,9 @@ export class AuthService {
       if (user) {
         this._setAuth(true);
         this.currentUser = user;
-        this.router.navigateByUrl('/');
       } else {
         this.currentUser = null;
         this._setAuth(false);
-        this.router.navigateByUrl('sign-in');
       }
     });
   }
@@ -54,8 +52,9 @@ export class AuthService {
       });
   }
 
-  signOut() {
-    this.afAuth.signOut();
+  async signOut() {
+    await this.afAuth.signOut();
+    this.router.navigateByUrl('/sign-in');
   }
 
   private _setAuth(value: boolean) {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -33,4 +34,7 @@ export class SignInComponent implements OnInit {
   onSubmit() {
     this.authService.signIn(this.email.value, this.password.value);
   }
+
+  faFacebook = faFacebook;
+  faGoogle = faGoogle;
 }

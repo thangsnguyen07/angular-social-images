@@ -7,6 +7,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
+
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -51,6 +53,9 @@ export class SignUpComponent implements OnInit {
   onSubmit() {
     this.authService.signUp(this.signUpForm.value);
   }
+
+  faFacebook = faFacebook;
+  faGoogle = faGoogle;
 }
 
 const passwordMatchingValidatior: ValidatorFn = (
