@@ -1,9 +1,9 @@
-<div class="flex justify-center py-5">
-  <div class="flex flex-col md:flex-row w-full md:w-[60%] md:max-w-[1000px]">
+<div class="flex flex-col items-center py-5">
+  <div class="flex flex-col lg:flex-row w-full lg:w-[60%] lg:max-w-[1000px]">
     <div class="flex-1 p-5">
       <div>
         <img
-          class="object-cover w-full h-full overflow-hidden rounded-l-3xl"
+          class="object-cover w-full h-full overflow-hidden rounded-t-3xl lg:rounded-r-none lg:rounded-l-3xl"
           src="{{ post.image }}"
           alt="{{ post.name }}"
         />
@@ -40,6 +40,15 @@
               >Copy Image Url</span
             >
           </div>
+          <!-- Heart -->
+          <div class="flex items-center justify-center space-x-1">
+            <fa-icon
+              class="flex items-center justify-center w-10 h-10 text-xl transition-all duration-300 cursor-pointer hover:scale-125 active:text-red-500"
+              [icon]="heartIcon"
+            ></fa-icon>
+
+            <span>24</span>
+          </div>
         </div>
       </div>
       <div class="flex items-center justify-between mt-4 space-x-2">
@@ -68,5 +77,13 @@
         <app-post-comment [post]="post"></app-post-comment>
       </div>
     </div>
+  </div>
+
+  <h2 class="text-2xl font-semibold">Related posts</h2>
+
+  <div class="w-full mt-4">
+    <ngx-masonry class="w-full" [options]="{ gutter: 8 }">
+      <app-post-card *ngFor="let post of posts" [post]="post"></app-post-card>
+    </ngx-masonry>
   </div>
 </div>

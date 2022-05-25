@@ -12,6 +12,5 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.posts = this.postService.posts;
-    console.log(this.posts);
   }
 }

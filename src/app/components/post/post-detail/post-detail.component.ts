@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faDownload, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faHeart, faLink } from '@fortawesome/free-solid-svg-icons';
 import { PostService } from 'src/app/services/post.service';
 
 @Component({
@@ -12,6 +12,8 @@ export class PostDetailComponent implements OnInit {
   id!: string;
   post: any;
 
+  posts: any[] = [];
+
   constructor(
     private postService: PostService,
     private route: ActivatedRoute
@@ -22,8 +24,12 @@ export class PostDetailComponent implements OnInit {
       this.id = params['id'];
       this.post = this.postService.getPost(this.id);
     });
+
+    this.posts = this.postService.posts;
+    console.log(this.posts);
   }
 
   downloadIcon = faDownload;
   copyIcon = faLink;
+  heartIcon = faHeart;
 }

@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-post-card',
@@ -7,11 +9,17 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PostCardComponent implements OnInit {
   @Input() post: any;
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
   logPost() {
     console.log(this.post.name);
   }
+
+  goToPost(): void {
+    this.router.navigateByUrl(`/post/${this.post.id}`);
+  }
+
+  heartIcon = faHeart;
 }

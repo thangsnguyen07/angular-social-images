@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -8,12 +8,20 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent implements OnInit {
-  isOpenSidebar = false;
-  constructor(private authService: AuthService) {}
+  isOpenSidebar: boolean = false;
+  isOpenNotification: boolean = false;
 
-  ngOnInit(): void {
-    console.log('render');
+  notificationClick: boolean = false;
+  constructor(private authService: AuthService, private renderer: Renderer2) {
+    this.renderer.listen('window', 'click', (e: Event) => {
+      if (!this.notificationClick) {
+        this.isOpenNotification = false;
+      }
+      this.notificationClick = false;
+    });
   }
+
+  ngOnInit(): void {}
 
   toggleSidebar() {
     this.isOpenSidebar = !this.isOpenSidebar;
@@ -23,5 +31,14 @@ export class NavBarComponent implements OnInit {
     this.authService.signOut();
   }
 
+  // Notification
+  toggleNotification() {
+    this.isOpenNotification = !this.isOpenNotification;
+  }
+  preventCloseOnClick() {
+    this.notificationClick = true;
+  }
+
   faBars = faBars;
+  faBell = faBell;
 }

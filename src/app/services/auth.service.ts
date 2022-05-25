@@ -37,6 +37,7 @@ export class AuthService {
       .createUserWithEmailAndPassword(signUpData.email, signUpData.password)
       .then((response) => {
         this._addUser(response.user);
+        this.router.navigateByUrl('/');
       })
       .catch((err: Error) => {
         alert(err.message);
@@ -46,7 +47,9 @@ export class AuthService {
   signIn(email: string, password: string) {
     this.afAuth
       .signInWithEmailAndPassword(email, password)
-      .then((result) => {})
+      .then((result) => {
+        this.router.navigateByUrl('/');
+      })
       .catch((err: Error) => {
         alert(err.message);
       });

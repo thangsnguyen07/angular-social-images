@@ -1,0 +1,35 @@
+<div
+  ngxMasonryItem
+  class="w-[49%] md:w-[24%] lg:w-[19%] xl:w-[16.1%] mb-4 max-h-[600px] flex flex-col"
+>
+  <div class="relative h-[80%] group cursor-pointer">
+    <img
+      class="object-cover w-full h-full rounded-3xl"
+      src="{{ post.image }}"
+      alt=""
+    />
+    <div
+      class="absolute inset-0 z-30 hidden w-full h-full rounded-3xl group-hover:block"
+    >
+      <div
+        class="w-full h-full rounded-3xl bg-black/50"
+        (click)="goToPost()"
+      ></div>
+      <button
+        class="absolute z-40 w-10 h-10 transition-all duration-300 bg-red-500 rounded-full hover:scale-110 top-4 right-4"
+        (click)="logPost()"
+      >
+        <fa-icon class="text-xl text-white" [icon]="heartIcon"></fa-icon>
+      </button>
+    </div>
+  </div>
+  <!-- Author -->
+  <div class="h-[20%] flex mt-1 items-center">
+    <img
+      class="object-cover mr-2 rounded-full cursor-pointer w-7 h-7 aspect-square"
+      src="https://i.pinimg.com/150x150/8a/c2/15/8ac2159ae006199d6a0f786d6585a0fe.jpg"
+      alt=""
+    />
+    <span class="text-sm text-gray-500 cursor-pointer">ndth4ng</span>
+  </div>
+</div>

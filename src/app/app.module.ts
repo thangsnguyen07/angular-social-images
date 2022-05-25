@@ -26,12 +26,14 @@ import { PostService } from './services/post.service';
 
 import { NgxMasonryModule } from 'ngx-masonry';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PostCardComponent } from './components/home/post-card/post-card.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
 import { PostComponent } from './components/post/post.component';
 import { PostDetailComponent } from './components/post/post-detail/post-detail.component';
 import { AutosizeModule } from 'ngx-autosize';
 import { PostComment } from './components/post/post-detail/post-comment/post-comment.component';
 import { PostCommentItemComponent } from './components/post/post-detail/post-comment/post-comment-item/post-comment-item.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { NotificationCardComponent } from './components/notification/notification-card/notification-card.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,6 +46,8 @@ import { PostCommentItemComponent } from './components/post/post-detail/post-com
     PostDetailComponent,
     PostComment,
     PostCommentItemComponent,
+    NotificationComponent,
+    NotificationCardComponent,
   ],
   imports: [
     BrowserModule,

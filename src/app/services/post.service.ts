@@ -135,7 +135,6 @@ export class PostService {
 
   getPost(id: string) {
     let post = this.posts.find((post) => post.id.toString() === id);
-    console.log(post);
     return post;
   }
 }
