@@ -34,6 +34,15 @@ import { PostComment } from './components/post/post-detail/post-comment/post-com
 import { PostCommentItemComponent } from './components/post/post-detail/post-comment/post-comment-item/post-comment-item.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationCardComponent } from './components/notification/notification-card/notification-card.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { PostCreatedComponent } from './components/profile/post-created/post-created.component';
+import { PostLikedComponent } from './components/profile/post-liked/post-liked.component';
+import { FollowersPopupComponent } from './components/profile/followers-popup/followers-popup.component';
+import { FollowerCardComponent } from './components/profile/followers-popup/follower-card/follower-card.component';
+import { PostCreatedCardComponent } from './components/profile/post-created/post-created-card/post-created-card.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { EditProfileComponent } from './components/settings/edit-profile/edit-profile.component';
+import { SecurityComponent } from './components/settings/security/security.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +57,15 @@ import { NotificationCardComponent } from './components/notification/notificatio
     PostCommentItemComponent,
     NotificationComponent,
     NotificationCardComponent,
+    ProfileComponent,
+    PostCreatedComponent,
+    PostLikedComponent,
+    FollowersPopupComponent,
+    FollowerCardComponent,
+    PostCreatedCardComponent,
+    SettingsComponent,
+    EditProfileComponent,
+    SecurityComponent,
   ],
   imports: [
     BrowserModule,

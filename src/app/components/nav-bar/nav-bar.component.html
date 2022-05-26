@@ -1,5 +1,5 @@
 <div
-  class="fixed top-0 flex items-center w-full p-4 bg-orange-500 h-[72px] z-50"
+  class="fixed top-0 flex items-center w-full p-4 bg-orange-500 h-[72px] z-30"
 >
   <nav class="flex items-center justify-between w-full">
     <div class="text-3xl font-bold text-white cursor-pointer" routerLink="/">
@@ -51,7 +51,8 @@
 
       <div class="w-8 h-8">
         <img
-          class="rounded-full"
+          routerLink="/profile/ndth4ng"
+          class="rounded-full cursor-pointer"
           src="https://m.media-amazon.com/images/I/81tpy7oo+EL._SS500_.jpg"
           alt=""
         />
@@ -86,6 +87,6 @@
 </div>
 
 <app-notification
-  [ngClass]="isOpenNotification ? 'block' : 'hidden'"
+  *ngIf="isOpenNotification"
   (click)="preventCloseOnClick()"
 ></app-notification>

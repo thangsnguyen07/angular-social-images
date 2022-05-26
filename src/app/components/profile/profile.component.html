@@ -1,0 +1,105 @@
+<div class="mt-[72px] px-2">
+  <div class="flex justify-center w-full mb-8">
+    <div class="flex flex-col items-center w-full md:w-1/2">
+      <div class="my-3">
+        <!--       src="https://m.media-amazon.com/images/I/81tpy7oo+EL._SS500_.jpg" -->
+        <img
+          *ngIf="username === 'ndth4ng'; else other_avatar"
+          class="w-[120px] h-[120px] rounded-full"
+          src="https://m.media-amazon.com/images/I/81tpy7oo+EL._SS500_.jpg"
+          alt=""
+        />
+
+        <ng-template #other_avatar>
+          <img
+            class="w-[120px] h-[120px] rounded-full"
+            src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/278424342_3323578534577829_1463597856300375227_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=szBOteu4cEsAX8wiGs9&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT9b4F3Ni9uS-N83BCQYE9aVo_qQpIIzug-NUkdP0G_xqA&oe=62936AA0"
+            alt=""
+          />
+        </ng-template>
+      </div>
+
+      <div class="my-1">
+        <h3
+          *ngIf="username === 'ndth4ng'; else other_name"
+          class="text-3xl font-bold leading-3"
+        >
+          Thang Nguyen
+        </h3>
+
+        <ng-template #other_name>
+          <h5 c class="text-3xl font-bold leading-3">Tu Ha</h5>
+        </ng-template>
+      </div>
+
+      <div class="my-2">
+        <h5
+          *ngIf="username === 'ndth4ng'; else other_username"
+          class="text-gray-500"
+        >
+          @ndth4ng
+        </h5>
+        <ng-template #other_username>
+          <h5 class="text-gray-500">@tuha1412</h5>
+        </ng-template>
+      </div>
+
+      <div class="my-1">
+        <p *ngIf="username === 'ndth4ng'; else other_bio" class="text-center">
+          🖤❌🤖
+        </p>
+
+        <ng-template #other_bio>
+          <p class="text-center">🤡🤡🤡🤡</p>
+        </ng-template>
+      </div>
+
+      <div class="my-1">
+        <span
+          class="font-semibold cursor-pointer"
+          (click)="toggleOpenFollowers()"
+          >10 followers</span
+        >
+      </div>
+
+      <div class="my-2">
+        <ng-template #other_button>
+          <button class="btn btn-primary !rounded-3xl px-5">Follow</button>
+        </ng-template>
+        <button
+          *ngIf="username === 'ndth4ng'; else other_button"
+          class="px-4 py-3 font-semibold transition-all duration-300 rounded-3xl hover:bg-orange-100"
+          routerLink="/settings"
+        >
+          Edit Profile
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-center w-full mb-4 space-x-5">
+    <div
+      class="py-2 font-semibold border-4 border-white cursor-pointer"
+      routerLinkActive="active"
+      routerLink="created"
+    >
+      Created Posts
+    </div>
+    <div
+      class="py-2 font-semibold border-4 border-white cursor-pointer"
+      routerLinkActive="active"
+      routerLink="liked"
+    >
+      Liked Posts
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
+
+  <!-- Followers Popup -->
+
+  <app-followers-popup
+    *ngIf="isOpenFollowers"
+    (onClose)="toggleOpenFollowers()"
+  ></app-followers-popup>
+</div>

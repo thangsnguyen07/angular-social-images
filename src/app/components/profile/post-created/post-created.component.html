@@ -1,0 +1,6 @@
+<ngx-masonry [options]="{ gutter: 8 }">
+  <app-post-created-card
+    *ngFor="let post of posts"
+    [post]="post"
+  ></app-post-created-card>
+</ngx-masonry>
