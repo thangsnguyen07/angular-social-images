@@ -11,6 +11,6 @@ export class PostLikedComponent implements OnInit {
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.posts = this.postService.posts.slice(10, 20);
+    // this.posts = this.postService.posts.slice(10, 20);
   }
 }

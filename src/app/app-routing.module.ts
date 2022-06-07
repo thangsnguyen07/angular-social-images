@@ -17,6 +17,7 @@ import { PostLikedComponent } from './components/profile/post-liked/post-liked.c
 import { SettingsComponent } from './components/settings/settings.component';
 import { EditProfileComponent } from './components/settings/edit-profile/edit-profile.component';
 import { SecurityComponent } from './components/settings/security/security.component';
+import { CreatePostComponent } from './components/create-post/create-post.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['sign-in']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['/']);
@@ -26,7 +27,7 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     canActivate: [AngularFireAuthGuard],
-    // data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
     path: 'sign-up',
@@ -44,6 +45,10 @@ const routes: Routes = [
     path: 'post',
     component: PostComponent,
     children: [{ path: ':id', component: PostDetailComponent }],
+  },
+  {
+    path: 'create-post',
+    component: CreatePostComponent,
   },
   {
     path: 'profile',
@@ -71,6 +76,7 @@ const routes: Routes = [
       { path: '**', redirectTo: 'edit-profile', pathMatch: 'full' },
     ],
   },
+  // { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
 @NgModule({

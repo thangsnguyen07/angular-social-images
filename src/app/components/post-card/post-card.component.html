@@ -1,12 +1,11 @@
 <div
-  ngxMasonryItem
-  class="w-[49%] md:w-[24%] lg:w-[19%] xl:w-[16.1%] mb-4 max-h-[600px] flex flex-col"
+  class="mb-4 overflow-hidden rounded-3xl break-inside-avoid max-h-[600px] flex flex-col"
 >
   <div class="relative h-[80%] group cursor-pointer">
     <img
       class="object-cover w-full h-full rounded-3xl"
-      src="{{ post.image }}"
-      alt=""
+      src="{{ post.imageUrl }}"
+      alt="{{ post.title }}"
     />
     <div
       class="absolute inset-0 z-30 hidden w-full h-full rounded-3xl group-hover:block"

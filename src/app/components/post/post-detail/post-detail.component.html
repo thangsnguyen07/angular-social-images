@@ -4,8 +4,8 @@
       <div>
         <img
           class="object-cover w-full h-full overflow-hidden rounded-t-3xl lg:rounded-r-none lg:rounded-l-3xl"
-          src="{{ post.image }}"
-          alt="{{ post.name }}"
+          src="{{ post?.imageUrl }}"
+          alt="{{ post?.title }}"
         />
       </div>
     </div>
@@ -47,7 +47,7 @@
               [icon]="heartIcon"
             ></fa-icon>
 
-            <span>24</span>
+            <span>{{ post?.likes?.length ?? 0 }}</span>
           </div>
         </div>
       </div>
@@ -55,8 +55,8 @@
         <div class="flex items-center space-x-2">
           <img
             class="object-cover w-10 h-10 rounded-full cursor-pointer"
-            src="{{ post.image }}"
-            alt="{{ post.name }}"
+            src="{{ post?.imageUrl }}"
+            alt="{{ post?.title }}"
           />
           <div class="flex flex-col cursor-pointer">
             <span class="font-semibold">Thang Nguyen</span>
@@ -69,21 +69,23 @@
       <!-- Body -->
       <div class="mt-4">
         <h1 class="!font-sans text-4xl font-bold tracking-wide leading-tight">
-          {{ post.title }}
+          {{ post?.title }}
         </h1>
-        <p class="mt-4 font-medium description">{{ post.name }}</p>
+        <p class="mt-4 font-medium description">{{ post?.description }}</p>
 
         <!-- Comment Section -->
-        <app-post-comment [post]="post"></app-post-comment>
+        <app-post-comment></app-post-comment>
       </div>
     </div>
   </div>
 
   <h2 class="text-2xl font-semibold">Related posts</h2>
 
-  <div class="w-full mt-4">
-    <ngx-masonry class="w-full" [options]="{ gutter: 8 }">
+  <!-- <div class="mt-4">
+    <div
+      class="gap-3 mx-auto space-y-3 columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-7 pb-28"
+    >
       <app-post-card *ngFor="let post of posts" [post]="post"></app-post-card>
-    </ngx-masonry>
-  </div>
+    </div>
+  </div> -->
 </div>

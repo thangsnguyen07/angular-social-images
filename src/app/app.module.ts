@@ -43,6 +43,7 @@ import { PostCreatedCardComponent } from './components/profile/post-created/post
 import { SettingsComponent } from './components/settings/settings.component';
 import { EditProfileComponent } from './components/settings/edit-profile/edit-profile.component';
 import { SecurityComponent } from './components/settings/security/security.component';
+import { CreatePostComponent } from './components/create-post/create-post.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +67,7 @@ import { SecurityComponent } from './components/settings/security/security.compo
     SettingsComponent,
     EditProfileComponent,
     SecurityComponent,
+    CreatePostComponent,
   ],
   imports: [
     BrowserModule,

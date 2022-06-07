@@ -1,10 +1,15 @@
+import { DocumentReference } from '@angular/fire/compat/firestore';
 import { Reply } from './reply';
+import { User } from './user';
 
-export interface Comment {
+export interface CommentType {
   id: string;
   content: string;
-  userRef: string;
   createdAt: Date;
-  replys: Reply[];
-  reactions: string[];
+  likes: DocumentReference[];
+  userRef: DocumentReference;
+  postRef: DocumentReference;
+
+  author: User;
+  replies: Reply[];
 }

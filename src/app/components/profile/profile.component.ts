@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-profile',
@@ -21,4 +22,6 @@ export class ProfileComponent implements OnInit {
   toggleOpenFollowers() {
     this.isOpenFollowers = !this.isOpenFollowers;
   }
+
+  faPlus = faPlus;
 }

@@ -11,6 +11,6 @@ export class PostCreatedComponent implements OnInit {
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.posts = this.postService.posts.slice(0, 10);
+    // this.posts = this.postService.posts.slice(0, 10);
   }
 }

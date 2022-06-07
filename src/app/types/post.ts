@@ -1,4 +1,5 @@
-import { Comment } from './comment';
+import { DocumentReference } from '@angular/fire/compat/firestore';
+import { CommentType } from './comment';
 
 export interface Post {
   id: string;
@@ -6,6 +7,7 @@ export interface Post {
   description: string;
   imageUrl: string;
   createdAt: Date;
-  reactions: string[];
+  userRef: DocumentReference;
+  likes: DocumentReference[];
   comments: Comment[];
 }
