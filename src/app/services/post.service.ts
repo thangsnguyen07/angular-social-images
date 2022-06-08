@@ -71,7 +71,7 @@ export class PostService {
         id: this.afs.createId(),
         imageId: result.public_id,
         imageUrl: result.secure_url,
-        createdAt: new Date(),
+        createdAt: Date.now(),
         title: postData.title,
         description: postData.description ?? '',
         userRef: userRef,

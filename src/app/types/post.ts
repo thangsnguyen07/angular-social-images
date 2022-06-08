@@ -8,7 +8,7 @@ export interface Post {
   description: string;
   imageUrl: string;
   imageId: string;
-  createdAt: Date;
+  createdAt: number;
   userRef: DocumentReference;
   author?: User;
   likes?: DocumentReference[];

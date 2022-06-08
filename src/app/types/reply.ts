@@ -2,6 +2,6 @@ export interface Reply {
   id: string;
   content: string;
   userRef: string;
-  createdAt: Date;
+  createdAt: number;
   reactions: string[];
 }
