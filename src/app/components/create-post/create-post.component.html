@@ -1,0 +1,60 @@
+<div class="md:h-screen pt-[72px] px-2 pb-2 bg-orange-50">
+  <div class="flex justify-center h-full mt-2 md:mt-0 md:items-center">
+    <div class="relative w-[800px] bg-white rounded-3xl py-10 px-2 md:px-10 overflow-hidden">
+      <fa-icon class="absolute text-2xl text-black cursor-pointer right-7 top-5" routerLink="/" [icon]="faClose">
+      </fa-icon>
+      <form [formGroup]="createPostForm" (ngSubmit)="submit()">
+        <div class="flex flex-col space-y-5 md:flex-row md:space-y-0">
+          <!-- Column 1 (Image) -->
+          <div class="md:flex-1 h-[500px] overflow-hidden mx-5 p-4 bg-orange-100 rounded-md relative">
+            <div class="flex flex-col items-center justify-center h-full border-2 border-gray-300 border-dashed">
+              <fa-icon class="text-3xl" [icon]="faUpload"></fa-icon>
+              <div>Upload image</div>
+            </div>
+
+            <div class="absolute inset-0" *ngIf="imageSource && imageSource !== ''">
+              <img [src]="imageSource" >
+            </div>
+
+            <input type="file" [disabled]="isLoading" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer bg-inherit"
+              accept="image/*" (change)="showPreview($event)"/>
+              <div *ngIf="imageError">File is not image</div>
+             
+          </div>
+          
+          <!-- Column 2 (Post Detail)-->
+          <div class="mx-5 md:flex-1">
+            <div class="flex items-center mt-2 space-x-2">
+              <img class="object-cover w-10 h-10 rounded-full cursor-pointer"
+                src="https://m.media-amazon.com/images/I/81tpy7oo+EL._SS500_.jpg" alt="" />
+              <div class="flex flex-col cursor-pointer">
+                <span class="font-semibold">Thang Nguyen</span>
+                <span class="text-sm">@ndth4ng</span>
+              </div>
+            </div>
+
+
+            <div class="flex flex-col justify-between">
+              <div>
+                <fieldset class="mt-5" [disabled]="isLoading">
+                  <input formControlName="title" placeholder="Enter title" type="text"
+                    class="w-full text-xl font-bold border-b outline-none border-b-orange-500 focus:border-b-2" />
+                    <div *ngIf="title.touched && title.hasError('required')">Required</div>
+                </fieldset>
+
+                <fieldset class="mt-10" [disabled]="isLoading">
+                  <textarea formControlName="description"  placeholder="Description of the image (Optional)" autosize [maxRows]="10" minRows="1"
+                    class="w-full border-b border-orange-500 outline-none resize-none"></textarea>
+                </fieldset>
+              </div>
+
+              <div class="mt-10 text-center">
+                <button [disabled]="createPostForm.invalid || isLoading" class="btn btn-primary">Create</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
