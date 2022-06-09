@@ -23,7 +23,7 @@ export class CreatePostComponent implements OnInit {
   constructor(public fb: FormBuilder, private postService: PostService) {
     this.createPostForm = this.fb.group({
       image: ['', Validators.required],
-      title: ['', Validators.required],
+      title: [''],
       description: ['', Validators.maxLength(300)],
     });
   }

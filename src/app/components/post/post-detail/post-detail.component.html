@@ -1,9 +1,11 @@
 <div class="flex flex-col items-center py-5">
-  <div class="flex flex-col lg:flex-row w-full lg:w-65%] lg:max-w-[1000px] shadow rounded-3xl overflow-hidden">
+  <div
+    class="flex flex-col lg:flex-row w-full lg:w-65%] lg:max-w-[1000px] shadow rounded-3xl overflow-hidden"
+  >
     <div class="flex-1">
       <div>
         <img
-          class="object-cover w-full overflow-hidden "
+          class="object-cover w-full overflow-hidden"
           src="{{ post?.imageUrl }}"
           alt="{{ post?.title }}"
         />
@@ -11,10 +13,11 @@
     </div>
     <div class="flex-1 px-8">
       <!-- Header -->
-      <div class="flex items-center pt-8">
+      <div class="flex items-center justify-between pt-8">
         <div class="flex space-x-2">
           <!-- Download -->
           <div
+            (click)="handleDownload()"
             class="flex items-center justify-center w-10 h-10 transition-all duration-300 rounded-full cursor-pointer has-tooltip hover:bg-orange-300"
           >
             <fa-icon
@@ -42,13 +45,30 @@
           </div>
           <!-- Heart -->
           <div class="flex items-center justify-center space-x-1">
-            <fa-icon
-              class="flex items-center justify-center w-10 h-10 text-xl transition-all duration-300 cursor-pointer hover:scale-125 active:text-red-500"
-              [icon]="heartIcon"
-            ></fa-icon>
+            <div (click)="handleLikePost()" class="cursor-pointer">
+              <fa-icon
+                [ngClass]="isLiked == true ? 'text-red-500' : 'text-black'"
+                class="flex items-center justify-center w-10 h-10 text-xl transition-all duration-300 hover:scale-125 active:text-red-500"
+                [icon]="heartIcon"
+              ></fa-icon>
+            </div>
 
             <span>{{ post?.likes?.length ?? 0 }}</span>
           </div>
+        </div>
+
+        <div
+          *ngIf="isAuthor"
+          (click)="handleEditPost()"
+          class="cursor-pointer has-tooltip"
+        >
+          <fa-icon
+            class="flex items-center justify-center w-10 h-10 text-xl transition-all duration-300 hover:scale-125 active:text-red-500"
+            [icon]="editIcon"
+          ></fa-icon>
+          <span class="p-1 text-white bg-orange-500 rounded shadow-lg tooltip"
+            >Edit</span
+          >
         </div>
       </div>
       <div class="flex items-center justify-between mt-4 space-x-2">
@@ -59,12 +79,16 @@
             alt="{{ post?.author?.username }}"
           />
           <div class="flex flex-col cursor-pointer">
-            <span class="font-semibold">Thang Nguyen</span>
-            <span class="text-sm">{{post?.author?.username}}</span>
+            <span class="font-semibold">{{
+              post?.author?.displayName ?? post?.author?.username
+            }}</span>
+            <span class="text-sm">{{ post?.author?.username }}</span>
           </div>
         </div>
 
-        <button class="btn btn-primary !rounded-3xl">Follow</button>
+        <button *ngIf="!isAuthor" class="btn btn-primary !rounded-3xl">
+          Follow
+        </button>
       </div>
       <!-- Body -->
       <div class="mt-4">
@@ -89,3 +113,9 @@
     </div>
   </div> -->
 </div>
+
+<app-edit-post
+  *ngIf="isEdit"
+  [post]="post"
+  (onClose)="handleEditPost()"
+></app-edit-post>

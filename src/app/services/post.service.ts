@@ -6,12 +6,14 @@ import {
   DocumentData,
   DocumentReference,
 } from '@angular/fire/compat/firestore';
+import fileDownload from 'js-file-download';
 import { Router } from '@angular/router';
-import { BehaviorSubject, skip, skipUntil } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { Post } from '../types/post';
 import { User } from '../types/user';
 import { AuthService } from './auth.service';
+import { FirebaseApp } from '@angular/fire/app';
 
 @Injectable({
   providedIn: 'root',
@@ -61,7 +63,7 @@ export class PostService {
   createPost(postData: any) {
     this.isLoading.next(true);
 
-    this.createImageUrl(postData.image).subscribe((result: any) => {
+    this._createImageUrl(postData.image).subscribe((result: any) => {
       // create user reference
       const userRef: DocumentReference<any> = this.afs
         .collection('users')
@@ -84,7 +86,48 @@ export class PostService {
     });
   }
 
-  createImageUrl(image: File) {
+  async deletePost(postId: string) {
+    await this.postsCollection.doc(postId).delete();
+  }
+
+  downloadImage(imageUrl: string, imageName: string): void {
+    this.http
+      .get(imageUrl, {
+        responseType: 'blob',
+      })
+      .subscribe((res) => {
+        fileDownload(res, `${imageName}.jpg`);
+      });
+  }
+
+  // REACTIONS
+
+  likePost(post: Post, uid: string) {
+    const postLikes: DocumentReference<any>[] = post.likes ?? [];
+
+    // create user reference
+    const userRef: DocumentReference<any> = this._createUserRef(uid);
+
+    // Check if user is already liked this post
+    if (postLikes.some((user) => user.path == userRef.path)) {
+      const index = postLikes.map((item) => item.path).indexOf(userRef.path);
+
+      postLikes.splice(index, 1);
+    } else {
+      // if not
+      postLikes.push(userRef);
+    }
+
+    this.postsCollection.doc(post.id).update({
+      likes: postLikes,
+    });
+  }
+
+  private _createUserRef(uid: string): DocumentReference<any> {
+    return this.afs.collection('users').doc(uid).ref;
+  }
+
+  private _createImageUrl(image: File) {
     let formData = new FormData();
     formData.append('image', image);
 

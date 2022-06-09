@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { PostService } from 'src/app/services/post.service';
@@ -20,6 +21,8 @@ export class PostComment implements OnInit {
 
   currentUser?: User;
 
+  commentSubscription!: Subscription;
+
   constructor(
     private postService: PostService,
     private commentService: CommentService,
@@ -32,24 +35,31 @@ export class PostComment implements OnInit {
       this.postId = params['id'];
     });
 
-    this.postService.getPostComments(this.postId!).subscribe((result) => {
-      if (result) {
-        result.forEach(async (item) => {
-          // console.log(item.payload.doc.data());
-          let comment: CommentType = item.payload.doc.data() as CommentType;
-          let author: User = await this.commentService.getCommentAuthor(
-            comment.userRef
-          );
-          comment.author = author;
+    this.commentSubscription = this.postService
+      .getPostComments(this.postId!)
+      .subscribe((result) => {
+        if (result) {
+          result.forEach(async (item) => {
+            // console.log(item.payload.doc.data());
+            let comment: CommentType = item.payload.doc.data() as CommentType;
+            let author: User = await this.commentService.getCommentAuthor(
+              comment.userRef
+            );
+            comment.author = author;
 
-          this.comments.push(comment);
-        });
-      }
-    });
+            this.comments.push(comment);
+            console.log('listen');
+          });
+        }
+      });
 
     this.authService.commentUser.subscribe((val) => {
       this.currentUser = val;
     });
+  }
+
+  ngOnDestroy() {
+    this.commentSubscription.unsubscribe();
   }
 
   onFocus(value: boolean) {
@@ -62,6 +72,8 @@ export class PostComment implements OnInit {
       this.postId!,
       this.currentUser?.uid!
     );
+
+    this.clearCommentContent();
   }
 
   clearCommentContent() {

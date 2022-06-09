@@ -19,7 +19,7 @@
   }
 
   .btn {
-    @apply px-3 py-2 font-medium text-white  rounded-md;
+    @apply px-3 py-2 font-medium text-white  rounded-md active:scale-95;
   }
 
   .btn-primary {
