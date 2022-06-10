@@ -1,8 +1,9 @@
-<div
-  class="fixed top-0 flex items-center w-full p-4 bg-white h-[72px] z-30"
->
+<div class="fixed top-0 flex items-center w-full p-4 bg-white h-[72px] z-50">
   <nav class="flex items-center justify-between flex-none w-full">
-    <div class="text-3xl font-bold text-orange-500 cursor-pointer" routerLink="/">
+    <div
+      class="text-3xl font-bold text-orange-500 cursor-pointer"
+      routerLink="/"
+    >
       Imagesio
     </div>
 
@@ -15,7 +16,6 @@
             class="rounded-l-3xl rounded-r-none form-control grow relative min-w-0 block px-6 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-orange-600 focus:outline-none"
             placeholder="Search"
             aria-label="Search"
-
           />
           <button
             class="flex items-center w-[80px] justify-center flex-none px-6 py-4 text-xs font-medium leading-tight text-white uppercase transition duration-150 ease-in-out bg-orange-500 rounded rounded-l-none shadow-md rounded-r-3xl btn hover:bg-orange-600 hover:shadow-lg focus:bg-orange-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-orange-700 active:shadow-lg"
@@ -42,19 +42,29 @@
     </div>
 
     <div class="items-center flex-none hidden space-x-3 md:flex">
-      <fa-icon
-        (click)="toggleNotification(); preventCloseOnClick()"
-        class="flex items-center justify-center w-10 h-10 text-2xl text-orange-500 rounded-full cursor-pointer hover:bg-orange-200"
-        [icon]="faBell"
-      ></fa-icon>
+      <div class="relative">
+        <fa-icon
+          (click)="toggleNotification(); preventCloseOnClick()"
+          class="flex items-center justify-center w-10 h-10 text-2xl text-orange-500 rounded-full cursor-pointer hover:bg-orange-200"
+          [icon]="faBell"
+        ></fa-icon>
+
+        <!-- Badge -->
+        <div
+          *ngIf="notificationBadge"
+          class="absolute top-0 left-0 flex items-center justify-center w-2 h-3 p-2 text-xs text-white bg-red-500 rounded-full"
+        >
+          {{ notificationBadge }}
+        </div>
+      </div>
 
       <div class="w-8 h-8">
         <img
           routerLink="/profile/ndth4ng"
           class="w-full h-full rounded-full cursor-pointer"
-          src="{{currentUser?.avatar}}"
-          alt="{{currentUser?.username}}"
-                  />
+          src="{{ currentUser?.avatar }}"
+          alt="{{ currentUser?.username }}"
+        />
       </div>
 
       <a

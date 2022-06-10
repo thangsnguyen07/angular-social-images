@@ -1,4 +1,4 @@
-<div class="fixed top-0 right-0 z-20 h-screen pt-[72px] pb-2 px-2">
+<div class="fixed top-0 right-0 h-screen pt-[72px] pb-2 px-2 z-40">
   <div
     class="relative h-full w-[350px] bg-white border-2 rounded-3xl border-orange-500 py-4 pl-4 pr-1 overflow-hidden"
   >
@@ -6,21 +6,10 @@
       <h3 class="font-semibold text-center">Notification</h3>
     </div>
     <div class="absolute bottom-0 left-0 right-0 px-2 overflow-y-scroll top-16">
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
-      <app-notification-card></app-notification-card>
+      <app-notification-card
+        *ngFor="let notification of notifications"
+        [notification]="notification"
+      ></app-notification-card>
     </div>
   </div>
 </div>

@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument,
+  DocumentReference,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';

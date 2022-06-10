@@ -1,6 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/types/notification';
 
 @Component({
   selector: 'app-nav-bar',
@@ -12,9 +14,15 @@ export class NavBarComponent implements OnInit {
   isOpenNotification: boolean = false;
   notificationClick: boolean = false;
 
+  notificationBadge: number = 0;
+
   currentUser: any;
 
-  constructor(private authService: AuthService, private renderer: Renderer2) {
+  constructor(
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private renderer: Renderer2
+  ) {
     this.renderer.listen('window', 'click', (e: Event) => {
       if (!this.notificationClick) {
         this.isOpenNotification = false;
@@ -26,11 +34,15 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.authService
-    //   .getUserInfo(this.authService.authUser.uid)
-    //   .subscribe((user) => {
-    //     this.currentUser = user;
-    //   });
+    this.notificationService.getNotifications().subscribe((val) => {
+      val.forEach((item) => {
+        const notification: Notification =
+          item.payload.doc.data() as Notification;
+        if (!notification.isSeen) {
+          this.notificationBadge++;
+        }
+      });
+    });
   }
 
   toggleSidebar() {
@@ -44,6 +56,10 @@ export class NavBarComponent implements OnInit {
   // Notification
   toggleNotification() {
     this.isOpenNotification = !this.isOpenNotification;
+
+    if (this.isOpenNotification) {
+      this.notificationBadge = 0;
+    }
   }
   preventCloseOnClick() {
     this.notificationClick = true;

@@ -13,7 +13,9 @@ import { BehaviorSubject } from 'rxjs';
 import { Post } from '../types/post';
 import { User } from '../types/user';
 import { AuthService } from './auth.service';
-import { FirebaseApp } from '@angular/fire/app';
+import { NotificationService } from './notification.service';
+import { NotificationState } from '../types/notification';
+import { FirestoreService } from './firestore.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,20 +30,22 @@ export class PostService {
     private afs: AngularFirestore,
     private http: HttpClient,
     private authService: AuthService,
+    private notificationService: NotificationService,
+    private firestoreService: FirestoreService,
     private router: Router
   ) {
     this.postsCollection = this.afs.collection('posts');
   }
 
   get posts() {
-    return this.postsCollection.valueChanges();
+    return this.postsCollection.stateChanges(['added']);
   }
 
   getPost(id: string) {
     return this.afs.doc<Post>(`posts/${id}`).valueChanges();
   }
 
-  async populatePost(post: Post) {
+  async populatePost(post: Post): Promise<Post> {
     const response: any = await post.userRef.get();
     const user: DocumentData | undefined = response.data();
 
@@ -111,25 +115,29 @@ export class PostService {
     const postLikes: DocumentReference<any>[] = post.likes ?? [];
 
     // create user reference
-    const userRef: DocumentReference<any> = this._createUserRef(uid);
+    const userRef: DocumentReference<any> =
+      this.firestoreService.generateUserRef(uid);
 
     // Check if user is already liked this post
     if (postLikes.some((user) => user.path == userRef.path)) {
       const index = postLikes.map((item) => item.path).indexOf(userRef.path);
-
       postLikes.splice(index, 1);
     } else {
       // if not
       postLikes.push(userRef);
+
+      // Notification
+      this.notificationService.createNotification(
+        uid,
+        post.author?.uid!,
+        post.id,
+        NotificationState.like
+      );
     }
 
     this.postsCollection.doc(post.id).update({
       likes: postLikes,
     });
-  }
-
-  private _createUserRef(uid: string): DocumentReference<any> {
-    return this.afs.collection('users').doc(uid).ref;
   }
 
   private _createImageUrl(image: File) {

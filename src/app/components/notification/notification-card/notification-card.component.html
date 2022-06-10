@@ -3,7 +3,7 @@
     <!-- Avatar -->
     <img
       class="object-cover w-8 h-8 mr-2 rounded-full aspect-square"
-      src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t1.15752-9/281789624_755232262136514_5525735097629316281_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=ae9488&_nc_ohc=E9nKo23v-lMAX-tLLz6&_nc_ht=scontent.fsgn2-4.fna&oh=03_AVI9vbBKgiSev18dkQDv0Z4vrTJIUSuOGO30C71vuel66g&oe=62B22500"
+      src="{{ notification.userSend?.avatar }}"
       alt=""
     />
 
@@ -11,12 +11,25 @@
     <div class="flex-grow">
       <!-- Username -->
       <p class="font-medium leading-4">
-        <span class="font-bold">Tú Hà</span>
-        like your post.
+        <span class="font-bold">{{
+          notification.userSend?.displayName ?? notification.userSend?.username
+        }}</span>
+        <span>{{
+          notification.state == StateType.like
+            ? " liked your post"
+            : notification.state == StateType.follow
+            ? " started following you"
+            : " has comment on your post"
+        }}</span>
+        <span *ngIf="notification.post?.title" class="font-semibold"
+          >: "{{ notification.post!.title | truncate: [20, "..."] }}"</span
+        >
       </p>
 
       <div class="flex items-center space-x-5">
-        <span class="text-sm font-medium text-gray-500">13 mins ago</span>
+        <span class="text-sm font-medium text-gray-500">{{
+          notification?.createdAt | dateAgo
+        }}</span>
       </div>
     </div>
   </div>
