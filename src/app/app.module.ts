@@ -47,6 +47,7 @@ import { SecurityComponent } from './components/settings/security/security.compo
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { EditPostComponent } from './components/post/edit-post/edit-post.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,8 +72,11 @@ import { EditPostComponent } from './components/post/edit-post/edit-post.compone
     EditProfileComponent,
     SecurityComponent,
     CreatePostComponent,
-    DateAgoPipe,
     EditPostComponent,
+
+    // Custom Pipes
+    DateAgoPipe,
+    TruncatePipe,
   ],
   imports: [
     BrowserModule,

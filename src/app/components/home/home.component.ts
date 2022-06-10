@@ -16,8 +16,9 @@ export class HomeComponent implements OnInit {
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.subscription = this.postService.posts.subscribe((posts: Post[]) => {
-      posts.forEach(async (post: Post) => {
+    this.subscription = this.postService.posts.subscribe((val) => {
+      val.forEach(async (item) => {
+        let post: Post = item.payload.doc.data();
         const populatedPost = await this.postService.populatePost(post);
         this.posts.push(populatedPost);
       });

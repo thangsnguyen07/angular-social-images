@@ -48,7 +48,6 @@ export class PostComment implements OnInit {
             comment.author = author;
 
             this.comments.push(comment);
-            console.log('listen');
           });
         }
       });
