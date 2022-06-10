@@ -12,14 +12,13 @@
     ></app-post-comment-item>
   </div>
   <!-- Comment Box -->
-  <div class="flex items-center mt-4 space-x-3">
-    <div>
-      <img
-        class="object-cover w-10 h-10 rounded-full aspect-square"
-       src="{{ currentUser?.avatar }}"
-        alt="{{ currentUser?.username }}"
-      />
-    </div>
+  <div class="flex items-start mt-4 space-x-3">
+    <img
+      class="object-cover w-10 h-10 rounded-full aspect-square"
+      src="{{ currentUser?.avatar }}"
+      alt="{{ currentUser?.username }}"
+    />
+
     <div
       class="flex items-center flex-grow px-3 py-2 border border-orange-500 focus-within:rounded-lg focus-within:py-3 rounded-3xl"
     >
