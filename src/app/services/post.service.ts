@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
@@ -86,8 +86,13 @@ export class PostService {
     });
   }
 
-  async deletePost(postId: string) {
-    await this.postsCollection.doc(postId).delete();
+  async deletePost(post: Post) {
+    await this.postsCollection.doc(post.id).delete();
+    this._deleteImageSource(post.imageId);
+  }
+
+  async editPost(postId: string, editData: any) {
+    await this.postsCollection.doc(postId).update(editData);
   }
 
   downloadImage(imageUrl: string, imageName: string): void {
@@ -134,6 +139,19 @@ export class PostService {
     return this.http.post(
       'https://imagesio.herokuapp.com/api/image/getUrl',
       formData
+    );
+  }
+
+  private _deleteImageSource(imageId: string): void {
+    let httpHeaders = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    this.http.post(
+      'https://imagesio.herokuapp.com/api/image/deleteImage',
+      {
+        cloudinary_id: imageId,
+      },
+      { headers: httpHeaders }
     );
   }
 }

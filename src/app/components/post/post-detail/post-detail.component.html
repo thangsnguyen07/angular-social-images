@@ -3,12 +3,24 @@
     class="flex flex-col lg:flex-row w-full lg:w-65%] lg:max-w-[1000px] shadow rounded-3xl overflow-hidden"
   >
     <div class="flex-1">
-      <div>
+      <div class="relative group">
         <img
-          class="object-cover w-full overflow-hidden"
+          [ngClass]="imageHeight < 500 ? 'lg:p-4 lg:rounded-3xl' : ''"
+          class="object-cover w-full lg:rounded-l-3xl"
+          (load)="getImageHeight($event.currentTarget)"
           src="{{ post?.imageUrl }}"
           alt="{{ post?.title }}"
         />
+
+        <div
+          class="absolute px-4 py-2 bg-white rounded-full cursor-pointer group-hover:!block hidden bottom-5 left-5 hover:bg-gray-200"
+          (click)="viewImage()"
+        >
+          <div class="flex items-center space-x-3">
+            <fa-icon class="text-2xl" [icon]="viewIcon"></fa-icon>
+            <div class="font-bold">View image</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="flex-1 px-8">

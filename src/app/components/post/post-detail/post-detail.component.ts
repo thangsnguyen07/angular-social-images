@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
+  faArrowUpRightDots,
   faDownload,
   faHeart,
   faLink,
   faPencil,
+  faSquareArrowUpRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -19,12 +21,12 @@ import { Post } from 'src/app/types/post';
 export class PostDetailComponent implements OnInit {
   id!: string;
   post?: Post;
+  imageHeight!: number;
 
   postSubscription!: Subscription;
 
   isLiked: boolean = false;
   isAuthor: boolean = false;
-
   isEdit: boolean = false;
 
   constructor(
@@ -32,6 +34,10 @@ export class PostDetailComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute
   ) {}
+
+  getImageHeight(dom: any) {
+    this.imageHeight = dom.clientHeight;
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
@@ -79,8 +85,13 @@ export class PostDetailComponent implements OnInit {
     this.isEdit = !this.isEdit;
   }
 
+  viewImage(): void {
+    window.open(this.post?.imageUrl);
+  }
+
   downloadIcon = faDownload;
   copyIcon = faLink;
   heartIcon = faHeart;
   editIcon = faPencil;
+  viewIcon = faSquareArrowUpRight;
 }
