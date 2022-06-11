@@ -1,5 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FollowService } from 'src/app/services/follow.service';
+import { User } from 'src/app/types/user';
 
 @Component({
   selector: 'app-followers-popup',
@@ -8,9 +10,21 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 })
 export class FollowersPopupComponent implements OnInit {
   @Output() onClose: EventEmitter<void> = new EventEmitter();
-  constructor() {}
+  @Input() userId!: string;
+  followers: User[] = [];
 
-  ngOnInit(): void {}
+  isLoading: boolean = true;
+
+  constructor(private followService: FollowService) {}
+
+  ngOnInit(): void {
+    this.getFollowers();
+  }
+
+  async getFollowers() {
+    this.followers = await this.followService.getFollowers(this.userId);
+    this.isLoading = false;
+  }
 
   handleClose() {
     this.onClose.emit();

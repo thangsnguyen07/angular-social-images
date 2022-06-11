@@ -52,9 +52,7 @@ export class PostComment implements OnInit {
         }
       });
 
-    this.authService.commentUser.subscribe((val) => {
-      this.currentUser = val;
-    });
+    this.currentUser = this.authService.currentUser!;
   }
 
   ngOnDestroy() {

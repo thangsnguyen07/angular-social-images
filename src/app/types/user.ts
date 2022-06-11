@@ -1,3 +1,5 @@
+import { DocumentReference } from '@angular/fire/compat/firestore';
+
 export interface User {
   uid: string;
   email: string;
@@ -5,4 +7,7 @@ export interface User {
   username: string;
   avatar: string;
   emailVerified: boolean;
+
+  followers?: DocumentReference[];
+  followings?: DocumentReference[];
 }

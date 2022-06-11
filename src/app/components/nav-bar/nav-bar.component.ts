@@ -30,7 +30,11 @@ export class NavBarComponent implements OnInit {
       this.notificationClick = false;
     });
 
-    this.currentUser = this.authService.currentUser;
+    this.authService.isAuth.subscribe((status) => {
+      if (status == true) {
+        this.currentUser = this.authService.currentUser;
+      }
+    });
   }
 
   ngOnInit(): void {

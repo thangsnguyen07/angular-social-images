@@ -78,10 +78,12 @@ export class NotificationService {
     populatedNotification.userReceive = userReceiveInfo;
 
     // Populate post info
-    const postInfor = await this.firestoreService.getPostByPostRef(
-      notification.postRef!
-    );
-    populatedNotification.post = postInfor;
+    if (notification.post) {
+      const postInfor = await this.firestoreService.getPostByPostRef(
+        notification.postRef!
+      );
+      populatedNotification.post = postInfor;
+    }
 
     return populatedNotification;
   }
@@ -101,7 +103,7 @@ export class NotificationService {
       this.router.navigateByUrl(`post/${post.id}`);
     } else {
       // interact with user
-      this.router.navigateByUrl(`profile/${user.uid}`);
+      this.router.navigateByUrl(`profile/${user.username}`);
     }
   }
 }
