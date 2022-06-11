@@ -32,11 +32,14 @@ export class NotificationComponent implements OnInit {
             notification
           );
 
+          if (item.type == 'added') {
+            this.notifications.unshift(notification);
+          }
+
+          // Set this notification is seen, so it will not show in notification badge
           if (!notification.isSeen) {
             this.notificationService.seenNotification(notification.id);
           }
-
-          this.notifications.unshift(notification);
         });
       });
   }

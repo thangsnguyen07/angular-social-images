@@ -111,6 +111,7 @@ export class PostService {
 
   // REACTIONS
 
+  //post and id user like
   likePost(post: Post, uid: string) {
     const postLikes: DocumentReference<any>[] = post.likes ?? [];
 
@@ -126,13 +127,16 @@ export class PostService {
       // if not
       postLikes.push(userRef);
 
-      // Notification
-      this.notificationService.createNotification(
-        uid,
-        post.author?.uid!,
-        post.id,
-        NotificationState.like
-      );
+      // Not notification if you interact with your post
+      if (uid != post.author?.uid) {
+        // Notification
+        this.notificationService.createNotification(
+          uid,
+          post.author?.uid!,
+          post.id,
+          NotificationState.like
+        );
+      }
     }
 
     this.postsCollection.doc(post.id).update({

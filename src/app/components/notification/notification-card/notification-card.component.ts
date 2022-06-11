@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NotificationService } from 'src/app/services/notification.service';
 import { Notification, NotificationState } from 'src/app/types/notification';
 
 @Component({
@@ -9,7 +10,14 @@ import { Notification, NotificationState } from 'src/app/types/notification';
 export class NotificationCardComponent implements OnInit {
   @Input() notification!: Notification;
   StateType = NotificationState;
-  constructor() {}
+  constructor(private notificationService: NotificationService) {}
 
   ngOnInit(): void {}
+
+  handleClick() {
+    this.notificationService.clickNotification(
+      this.notification.userSend!,
+      this.notification.post
+    );
+  }
 }
