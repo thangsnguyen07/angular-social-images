@@ -3,6 +3,7 @@ import {
   AngularFirestore,
   DocumentReference,
 } from '@angular/fire/compat/firestore';
+import { Router } from '@angular/router';
 import { Notification, NotificationState } from '../types/notification';
 import { Post } from '../types/post';
 import { User } from '../types/user';
@@ -17,7 +18,8 @@ export class NotificationService {
   constructor(
     private afs: AngularFirestore,
     private authService: AuthService,
-    private firestoreService: FirestoreService
+    private firestoreService: FirestoreService,
+    private router: Router
   ) {}
 
   getNotifications() {
@@ -91,5 +93,15 @@ export class NotificationService {
       .collection('notifications')
       .doc(notificationId)
       .update({ isSeen: true });
+  }
+
+  clickNotification(user: User, post?: Post) {
+    if (post) {
+      // interact with post
+      this.router.navigateByUrl(`post/${post.id}`);
+    } else {
+      // interact with user
+      this.router.navigateByUrl(`profile/${user.uid}`);
+    }
   }
 }

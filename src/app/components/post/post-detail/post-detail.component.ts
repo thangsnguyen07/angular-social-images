@@ -42,31 +42,31 @@ export class PostDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.id = params['id'];
+
+      this.postSubscription = this.postService
+        .getPost(this.id)
+        .subscribe(async (result) => {
+          if (result) {
+            const populatedPost: Post = await this.postService.populatePost(
+              result
+            );
+            this.post = populatedPost;
+
+            // Check if user is liked post
+
+            this.post?.likes?.some(
+              (userRef) => userRef.id == this.authService.currentUser?.uid
+            )
+              ? (this.isLiked = true)
+              : (this.isLiked = false);
+
+            // Check if user is author
+            this.post?.author?.uid == this.authService.currentUser?.uid
+              ? (this.isAuthor = true)
+              : (this.isAuthor = false);
+          }
+        });
     });
-
-    this.postSubscription = this.postService
-      .getPost(this.id)
-      .subscribe(async (result) => {
-        if (result) {
-          const populatedPost: Post = await this.postService.populatePost(
-            result
-          );
-          this.post = populatedPost;
-
-          // Check if user is liked post
-
-          this.post?.likes?.some(
-            (userRef) => userRef.id == this.authService.currentUser?.uid
-          )
-            ? (this.isLiked = true)
-            : (this.isLiked = false);
-
-          // Check if user is author
-          this.post?.author?.uid == this.authService.currentUser?.uid
-            ? (this.isAuthor = true)
-            : (this.isAuthor = false);
-        }
-      });
   }
 
   ngOnDestroy() {
