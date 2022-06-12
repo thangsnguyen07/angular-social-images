@@ -48,6 +48,7 @@ import { CreatePostComponent } from './components/create-post/create-post.compon
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { EditPostComponent } from './components/post/edit-post/edit-post.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { PluralPipe } from './pipes/plural.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,6 +78,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     // Custom Pipes
     DateAgoPipe,
     TruncatePipe,
+    PluralPipe,
   ],
   imports: [
     BrowserModule,

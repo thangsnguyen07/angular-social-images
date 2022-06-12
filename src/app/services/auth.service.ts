@@ -3,10 +3,9 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument,
-  DocumentReference,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { User } from '../types/user';
 
 @Injectable({
@@ -16,7 +15,7 @@ export class AuthService {
   public isAuth: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _currentUser?: User | null;
 
-  public commentUser: BehaviorSubject<any> = new BehaviorSubject<any>(null); // temporary
+  private userUnsubcribe = new Subject<void>();
 
   constructor(
     public afAuth: AngularFireAuth,
@@ -25,13 +24,14 @@ export class AuthService {
   ) {
     this.afAuth.onAuthStateChanged(async (user) => {
       if (user) {
-        this.getUserInfo(user.uid).subscribe((userInfo: any) => {
-          this._setAuth(true);
-          this.setUser(userInfo);
-
-          this.commentUser.next(userInfo); // temporary
-        });
+        this.getUserById(user.uid)
+          .pipe(takeUntil(this.userUnsubcribe))
+          .subscribe((userInfo: any) => {
+            this.setUser(userInfo);
+            this._setAuth(true);
+          });
       } else {
+        this.userUnsubcribe.next();
         this.setUser(null);
         this._setAuth(false);
       }
@@ -46,8 +46,14 @@ export class AuthService {
     return this._currentUser;
   }
 
-  getUserInfo(uid: string) {
+  getUserById(uid: string) {
     return this.afFirestore.collection('users').doc(uid).valueChanges();
+  }
+
+  getUserByUsername(username: string) {
+    return this.afFirestore
+      .collection('users', (ref) => ref.where('username', '==', username))
+      .valueChanges();
   }
 
   signUp(signUpData: any) {
@@ -73,9 +79,8 @@ export class AuthService {
       });
   }
 
-  async signOut() {
-    await this.afAuth.signOut();
-    this.router.navigateByUrl('/sign-in');
+  signOut() {
+    this.afAuth.signOut().then(() => this.router.navigateByUrl('/sign-in'));
   }
 
   private _setAuth(value: boolean) {

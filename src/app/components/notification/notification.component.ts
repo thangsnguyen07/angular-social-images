@@ -15,10 +15,7 @@ export class NotificationComponent implements OnInit {
 
   notifications: Notification[] = [];
 
-  constructor(
-    private notificationService: NotificationService,
-    private authService: AuthService
-  ) {}
+  constructor(private notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.notificationsSubscription = this.notificationService
