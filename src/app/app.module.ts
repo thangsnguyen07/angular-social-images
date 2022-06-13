@@ -22,7 +22,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 import { environment } from '../environments/environment';
 import { AuthService } from './services/auth.service';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { NavBarComponent } from './components/layout/nav-bar/nav-bar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PostService } from './services/post.service';
 
@@ -45,10 +45,16 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { EditProfileComponent } from './components/settings/edit-profile/edit-profile.component';
 import { SecurityComponent } from './components/settings/security/security.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
-import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { EditPostComponent } from './components/post/edit-post/edit-post.component';
+import { ProfileSkeletonComponent } from './components/skeletons/profile-skeleton/profile-skeleton.component';
+import { PostSkeletonComponent } from './components/skeletons/post-skeleton/post-skeleton.component';
+import { EditProfileSkeletonComponent } from './components/skeletons/edit-profile-skeleton/edit-profile-skeleton.component';
+
+import { DateAgoPipe } from './pipes/date-ago.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { PluralPipe } from './pipes/plural.pipe';
+import { FooterComponent } from './components/layout/footer/footer.component';
+import { ErrorFeedbackComponent } from './components/error-feedback/error-feedback.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,6 +85,11 @@ import { PluralPipe } from './pipes/plural.pipe';
     DateAgoPipe,
     TruncatePipe,
     PluralPipe,
+    ProfileSkeletonComponent,
+    PostSkeletonComponent,
+    EditProfileSkeletonComponent,
+    FooterComponent,
+    ErrorFeedbackComponent,
   ],
   imports: [
     BrowserModule,

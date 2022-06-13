@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { faClose, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { PostService } from 'src/app/services/post.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-create-post',
@@ -20,7 +21,11 @@ export class CreatePostComponent implements OnInit {
 
   imageError: boolean = false;
 
-  constructor(public fb: FormBuilder, private postService: PostService) {
+  constructor(
+    public fb: FormBuilder,
+    private postService: PostService,
+    private utilService: UtilService
+  ) {
     this.createPostForm = this.fb.group({
       image: ['', Validators.required],
       title: [''],
@@ -59,7 +64,7 @@ export class CreatePostComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
 
-      if (this.isFileImage(file)) {
+      if (this.utilService.isFileImage(file)) {
         this.createPostForm.patchValue({
           image: file,
         });
@@ -75,10 +80,6 @@ export class CreatePostComponent implements OnInit {
         this.resetImageError();
       }
     }
-  }
-
-  isFileImage(file: any) {
-    return file && file['type'].split('/')[0] === 'image';
   }
 
   resetImageError() {

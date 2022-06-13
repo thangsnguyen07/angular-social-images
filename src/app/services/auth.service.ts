@@ -5,8 +5,9 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
+import { BehaviorSubject, Subject, take, takeUntil } from 'rxjs';
 import { User } from '../types/user';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +16,14 @@ export class AuthService {
   public isAuth: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private _currentUser?: User | null;
 
+  public userObserver: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
   private userUnsubcribe = new Subject<void>();
 
   constructor(
     public afAuth: AngularFireAuth,
     public afFirestore: AngularFirestore,
+    private utilService: UtilService,
     private router: Router
   ) {
     this.afAuth.onAuthStateChanged(async (user) => {
@@ -40,6 +44,7 @@ export class AuthService {
 
   setUser(userInfo: User | null) {
     this._currentUser = userInfo;
+    this.userObserver.next(userInfo!);
   }
 
   get currentUser() {
@@ -105,4 +110,55 @@ export class AuthService {
       merge: true,
     });
   }
+
+  async updateUser(editUserData: EditUserData) {
+    if (editUserData.image) {
+      this.utilService
+        .createImageUrl(editUserData.image)
+        .subscribe((result: any) => {
+          this.afFirestore
+            .collection('users')
+            .doc<User>(this.currentUser?.uid)
+            .update({
+              avatar: result.secure_url,
+              avatarId: result.public_id,
+              bio: editUserData.bio,
+              displayName: editUserData.displayName,
+              username: editUserData.username,
+            });
+        });
+    } else {
+      this.afFirestore
+        .collection('users')
+        .doc<User>(this.currentUser?.uid)
+        .update({
+          bio: editUserData.bio,
+          displayName: editUserData.displayName,
+          username: editUserData.username,
+        });
+    }
+  }
+
+  changePassword(currentPassword: string, newPassword: string) {
+    console.log(currentPassword, newPassword);
+    this.afAuth
+      .signInWithEmailAndPassword(this.currentUser!.email, currentPassword)
+      .then(() => {
+        this.afAuth.currentUser.then((user) => {
+          user?.updatePassword(newPassword).then(() => {
+            console.log('update success');
+          });
+        });
+      })
+      .catch(() => {
+        console.log('Your current password is not correct');
+      });
+  }
+}
+
+interface EditUserData {
+  image?: File;
+  displayName?: string;
+  bio?: string;
+  username: string;
 }

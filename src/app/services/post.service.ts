@@ -6,7 +6,7 @@ import {
   DocumentData,
   DocumentReference,
 } from '@angular/fire/compat/firestore';
-import fileDownload from 'js-file-download';
+
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 
@@ -16,6 +16,7 @@ import { AuthService } from './auth.service';
 import { NotificationService } from './notification.service';
 import { NotificationState } from '../types/notification';
 import { FirestoreService } from './firestore.service';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,7 @@ export class PostService {
 
   constructor(
     private afs: AngularFirestore,
-    private http: HttpClient,
+    private utilService: UtilService,
     private authService: AuthService,
     private notificationService: NotificationService,
     private firestoreService: FirestoreService,
@@ -67,7 +68,7 @@ export class PostService {
   createPost(postData: any) {
     this.isLoading.next(true);
 
-    this._createImageUrl(postData.image).subscribe((result: any) => {
+    this.utilService.createImageUrl(postData.image).subscribe((result: any) => {
       // create user reference
       const userRef: DocumentReference<any> = this.afs
         .collection('users')
@@ -92,7 +93,7 @@ export class PostService {
 
   async deletePost(post: Post) {
     await this.postsCollection.doc(post.id).delete();
-    this._deleteImageSource(post.imageId);
+    this.utilService.deleteImageSource(post.imageId);
   }
 
   async editPost(postId: string, editData: any) {
@@ -100,13 +101,7 @@ export class PostService {
   }
 
   downloadImage(imageUrl: string, imageName: string): void {
-    this.http
-      .get(imageUrl, {
-        responseType: 'blob',
-      })
-      .subscribe((res) => {
-        fileDownload(res, `${imageName}.jpg`);
-      });
+    this.utilService.downloadImage(imageUrl, imageName);
   }
 
   // REACTIONS
@@ -144,26 +139,16 @@ export class PostService {
     });
   }
 
-  private _createImageUrl(image: File) {
-    let formData = new FormData();
-    formData.append('image', image);
-
-    return this.http.post(
-      'https://imagesio.herokuapp.com/api/image/getUrl',
-      formData
-    );
-  }
-
-  private _deleteImageSource(imageId: string): void {
-    let httpHeaders = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-    this.http.post(
-      'https://imagesio.herokuapp.com/api/image/deleteImage',
-      {
-        cloudinary_id: imageId,
-      },
-      { headers: httpHeaders }
-    );
-  }
+  // private _deleteImageSource(imageId: string): void {
+  //   let httpHeaders = new HttpHeaders({
+  //     'Content-Type': 'application/json',
+  //   });
+  //   this.http.post(
+  //     'https://imagesio.herokuapp.com/api/image/deleteImage',
+  //     {
+  //       cloudinary_id: imageId,
+  //     },
+  //     { headers: httpHeaders }
+  //   );
+  // }
 }

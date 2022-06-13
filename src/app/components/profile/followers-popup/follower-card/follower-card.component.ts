@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { FollowService } from 'src/app/services/follow.service';
 import { User } from 'src/app/types/user';
 
@@ -14,7 +15,11 @@ export class FollowerCardComponent implements OnInit {
 
   isFollow: boolean = false;
   isMe: boolean = false;
-  constructor(private followService: FollowService, private router: Router) {}
+  constructor(
+    private followService: FollowService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.isFollow = this.followService.checkFollow(this.follower.uid);
@@ -26,5 +31,10 @@ export class FollowerCardComponent implements OnInit {
 
     // close follower popup
     this.onNavigate.emit();
+  }
+
+  handleFollow() {
+    this.isFollow = !this.isFollow;
+    this.followService.followUser(this.authService.currentUser!, this.follower);
   }
 }
