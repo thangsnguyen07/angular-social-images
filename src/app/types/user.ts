@@ -6,6 +6,8 @@ export interface User {
   displayName: string;
   username: string;
   avatar: string;
+  avatarId?: string;
+  bio?: string;
   emailVerified: boolean;
 
   followers?: DocumentReference[];

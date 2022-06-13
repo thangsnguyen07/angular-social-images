@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   faArrowUpRightDots,
@@ -28,6 +28,8 @@ export class PostDetailComponent implements OnInit {
   isLiked: boolean = false;
   isAuthor: boolean = false;
   isEdit: boolean = false;
+
+  isLoading: boolean = true;
 
   constructor(
     private postService: PostService,
@@ -64,6 +66,8 @@ export class PostDetailComponent implements OnInit {
             this.post?.author?.uid == this.authService.currentUser?.uid
               ? (this.isAuthor = true)
               : (this.isAuthor = false);
+
+            this.isLoading = false;
           }
         });
     });

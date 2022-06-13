@@ -18,6 +18,7 @@
 
     <div *ngIf="!isMe">
       <button
+        (click)="handleFollow()"
         *ngIf="isFollow == false; else followed"
         class="btn btn-primary !px-4 rounded-3xl font-semibold"
       >
@@ -25,6 +26,7 @@
       </button>
       <ng-template #followed>
         <button
+          (click)="handleFollow()"
           class="btn btn-primary !px-4 rounded-3xl font-semibold !bg-gray-100 !text-black !hover:bg-gray-200"
         >
           Unfollow

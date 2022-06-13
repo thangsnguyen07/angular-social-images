@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Subscription } from 'rxjs';
+import { first, Subject, Subscription, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { FollowService } from 'src/app/services/follow.service';
 import { User } from 'src/app/types/user';
@@ -20,6 +20,9 @@ export class ProfileComponent implements OnInit {
 
   user?: User;
   isMe: boolean = false;
+  isLoading: boolean = true;
+
+  userUnsubcribe = new Subject<void>(); // temporary
 
   constructor(
     private authService: AuthService,
@@ -37,10 +40,16 @@ export class ProfileComponent implements OnInit {
           if (users.length > 0) {
             this.user = users[0];
 
-            this.isMe =
-              this.user?.uid == this.authService.currentUser?.uid
-                ? true
-                : false;
+            this.authService.userObserver
+              .pipe(takeUntil(this.userUnsubcribe))
+              .subscribe((userResult: User) => {
+                // console.log(userResult);
+                if (userResult) {
+                  this.isMe = this.user?.uid == userResult.uid ? true : false;
+
+                  this.isLoading = false;
+                }
+              });
           }
         });
     });
@@ -51,6 +60,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.userUnsubcribe.next();
     this.userSubscription.unsubscribe();
   }
 
