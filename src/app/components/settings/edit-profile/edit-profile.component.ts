@@ -68,19 +68,20 @@ export class EditProfileComponent implements OnInit {
     );
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     if (this.editUserForm.valid) {
       const editUserData: EditUserData = this.editUserForm.value;
-
+      this.isLoading = true;
       if (editUserData.username != this._username) {
         this.authService
           .getUserByUsername(editUserData.username)
           .pipe(take(1))
-          .subscribe((res) => {
+          .subscribe(async (res) => {
             // user exist => username exist
             if (res[0]) {
               this.isUsernameExist = true;
 
+              this.isLoading = false;
               // hide error
               setTimeout(() => {
                 this.isUsernameExist = false;
@@ -88,10 +89,12 @@ export class EditProfileComponent implements OnInit {
               return;
             }
 
-            this.authService.updateUser(editUserData);
+            await this.authService.updateUser(editUserData);
+            this.isLoading = false;
           });
       } else {
-        this.authService.updateUser(editUserData);
+        await this.authService.updateUser(editUserData);
+        this.isLoading = false;
       }
     }
   }

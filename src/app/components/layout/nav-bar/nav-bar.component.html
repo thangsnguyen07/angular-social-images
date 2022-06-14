@@ -102,4 +102,5 @@
 <app-notification
   *ngIf="isOpenNotification"
   (click)="preventCloseOnClick()"
+  (onNotificationClick)="isOpenNotification = !isOpenNotification"
 ></app-notification>

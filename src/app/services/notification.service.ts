@@ -78,7 +78,7 @@ export class NotificationService {
     populatedNotification.userReceive = userReceiveInfo;
 
     // Populate post info
-    if (notification.post) {
+    if (notification.postRef) {
       const postInfor = await this.firestoreService.getPostByPostRef(
         notification.postRef!
       );

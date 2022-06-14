@@ -1,11 +1,11 @@
 <div class="h-screen bg-image">
   <div class="flex h-full">
-    <div class="flex-1"></div>
-    <div class="flex justify-center flex-1 py-4">
+    <div class="flex-1 hidden md:block"></div>
+    <div class="flex justify-center flex-1 px-4 py-4 lg:px-0">
       <div
-        class="flex flex-col justify-center h-full px-20 py-4 bg-white border-2 border-white rounded-[36px]"
+        class="flex flex-col justify-center h-full w-full lg:w-auto px-8 lg:px-20 bg-white border-2 border-white rounded-[36px]"
       >
-        <h1 class="font-bold text-center">Welcome</h1>
+        <h1 class="text-3xl font-bold text-center">Welcome</h1>
         <p class="text-center">Please sign up to continue</p>
         <div class="mt-4">
           <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
@@ -17,8 +17,21 @@
                 id="email"
                 aria-describedby="emailHelp"
                 formControlName="email"
-                [ngClass]="{ 'invalid-input': email.invalid && email.touched }"
               />
+              <div
+                *ngIf="
+                  f['email'].invalid && (f['email'].dirty || f['email'].touched)
+                "
+              >
+                <app-error-feedback
+                  *ngIf="f['email'].errors?.['required']"
+                  message="Email is required"
+                ></app-error-feedback>
+                <app-error-feedback
+                  *ngIf="f['email'].errors?.['pattern']"
+                  message="Please enter a valid email"
+                ></app-error-feedback>
+              </div>
             </div>
 
             <div class="form-group">
@@ -28,10 +41,23 @@
                 class="form-control"
                 id="password"
                 formControlName="password"
-                [ngClass]="{
-                  'invalid-input': password.invalid && password.touched
-                }"
               />
+              <div
+                *ngIf="
+                  f['password'].invalid &&
+                  (f['password'].dirty || f['password'].touched)
+                "
+              >
+                <app-error-feedback
+                  *ngIf="f['password'].errors?.['minlength']"
+                  message="Password must be at least 6 characters"
+                >
+                </app-error-feedback>
+                <app-error-feedback
+                  *ngIf="f['password'].errors?.['required']"
+                  message="Password is required"
+                ></app-error-feedback>
+              </div>
             </div>
 
             <div class="form-group">
@@ -41,11 +67,24 @@
                 class="form-control"
                 id="confirmPassword"
                 formControlName="confirmPassword"
-                [ngClass]="{
-                  'invalid-input':
-                    confirmPassword.invalid && confirmPassword.touched
-                }"
               />
+              <div
+                *ngIf="
+                  f['confirmPassword'].invalid &&
+                  (f['confirmPassword'].dirty || f['confirmPassword'].touched)
+                "
+              >
+                <app-error-feedback
+                  *ngIf="f['confirmPassword'].errors?.['required']"
+                  message="Confirm Password is required"
+                >
+                </app-error-feedback>
+                <app-error-feedback
+                  *ngIf="f['confirmPassword'].errors?.['matching']"
+                  message=" Password does not match"
+                >
+                </app-error-feedback>
+              </div>
             </div>
 
             <div class="text-center">

@@ -88,15 +88,21 @@
         <div class="flex items-center justify-between mt-4 space-x-2">
           <div class="flex items-center space-x-2">
             <img
+              routerLink="/profile/{{ post?.author?.username }}"
               class="object-cover w-10 h-10 rounded-full cursor-pointer"
               src="{{ post?.author?.avatar }}"
               alt="{{ post?.author?.username }}"
             />
-            <div class="flex flex-col cursor-pointer">
-              <span class="font-semibold">{{
+            <div
+              routerLink="/profile/{{ post?.author?.username }}"
+              class="flex flex-col"
+            >
+              <span class="font-semibold cursor-pointer">{{
                 post?.author?.displayName ?? post?.author?.username
               }}</span>
-              <span class="text-sm">{{ post?.author?.username }}</span>
+              <span class="text-sm cursor-pointer"
+                >@{{ post?.author?.username }}</span
+              >
             </div>
           </div>
 

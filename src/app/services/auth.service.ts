@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { FacebookAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Subject, take, takeUntil } from 'rxjs';
 import { User } from '../types/user';
 import { UtilService } from './util.service';
+import { Util } from 'src/utils/utils';
+
+import firebase from 'firebase/compat';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +29,7 @@ export class AuthService {
     public afAuth: AngularFireAuth,
     public afFirestore: AngularFirestore,
     private utilService: UtilService,
+    private toastr: ToastrService,
     private router: Router
   ) {
     this.afAuth.onAuthStateChanged(async (user) => {
@@ -68,8 +74,16 @@ export class AuthService {
         this._addUser(response.user);
         this.router.navigateByUrl('/');
       })
-      .catch((err: Error) => {
-        alert(err.message);
+      .catch((err) => {
+        switch (err.code) {
+          case 'auth/email-already-in-use':
+            this.toastr.error(
+              'This email is already used by another user. Please choose another.'
+            );
+            break;
+          default:
+            this.toastr.error(err.message);
+        }
       });
   }
 
@@ -78,10 +92,56 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.router.navigateByUrl('/');
+        this.toastr.success(`Welcome ${result.user?.email}`);
       })
-      .catch((err: Error) => {
-        alert(err.message);
+      .catch((err) => {
+        switch (err.code) {
+          case 'auth/wrong-password':
+            this.toastr.error('The password you entered is incorrect.');
+            break;
+          case 'auth/invalid-email':
+            this.toastr.error('Please enter a valid email.');
+            break;
+          default:
+            this.toastr.error(err.message);
+        }
       });
+  }
+
+  // Sign in with Google
+  async GoogleAuth() {
+    await this.AuthLogin(new GoogleAuthProvider());
+    this.router.navigateByUrl('/');
+  }
+
+  // Sign in with Facebook
+  async FacebookAuth() {
+    await this.AuthLogin(new FacebookAuthProvider());
+    this.router.navigateByUrl('/');
+  }
+
+  // Auth logic to run auth providers
+  async AuthLogin(provider: any) {
+    try {
+      const result = await this.afAuth.signInWithPopup(provider);
+
+      if (result) {
+        // Check if email is not exist then add the user
+        this.afFirestore
+          .collection(`users`, (ref) =>
+            ref.where('email', '==', result.user!.email)
+          )
+          .snapshotChanges()
+          .pipe(take(1))
+          .subscribe((res) => {
+            if (res.length < 1) {
+              this._addUser(result.user);
+            }
+          });
+      }
+    } catch (err: any) {
+      this.toastr.error(err.message);
+    }
   }
 
   signOut() {
@@ -97,11 +157,13 @@ export class AuthService {
       `users/${user.uid}`
     );
 
+    const randomUsername = Util.generateRandomString(8); // 8 characters
+
     const userData: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      username: user.username,
+      username: randomUsername,
       avatar: user.photoURL,
       emailVerified: user.emailVerified,
     };
@@ -115,8 +177,8 @@ export class AuthService {
     if (editUserData.image) {
       this.utilService
         .createImageUrl(editUserData.image)
-        .subscribe((result: any) => {
-          this.afFirestore
+        .subscribe(async (result: any) => {
+          await this.afFirestore
             .collection('users')
             .doc<User>(this.currentUser?.uid)
             .update({
@@ -126,9 +188,11 @@ export class AuthService {
               displayName: editUserData.displayName,
               username: editUserData.username,
             });
+
+          this.toastr.success(`Update profile successfully.`);
         });
     } else {
-      this.afFirestore
+      await this.afFirestore
         .collection('users')
         .doc<User>(this.currentUser?.uid)
         .update({
@@ -136,23 +200,31 @@ export class AuthService {
           displayName: editUserData.displayName,
           username: editUserData.username,
         });
+      this.toastr.success(`Update profile successfully.`);
     }
   }
 
-  changePassword(currentPassword: string, newPassword: string) {
-    console.log(currentPassword, newPassword);
-    this.afAuth
-      .signInWithEmailAndPassword(this.currentUser!.email, currentPassword)
-      .then(() => {
-        this.afAuth.currentUser.then((user) => {
-          user?.updatePassword(newPassword).then(() => {
-            console.log('update success');
-          });
-        });
-      })
-      .catch(() => {
-        console.log('Your current password is not correct');
-      });
+  async changePassword(currentPassword: string, newPassword: string) {
+    try {
+      await this.afAuth.signInWithEmailAndPassword(
+        this.currentUser!.email,
+        currentPassword
+      );
+
+      const user = await this.afAuth.currentUser;
+      await user?.updatePassword(newPassword);
+
+      this.toastr.success('Update password successfully!');
+    } catch (err: any) {
+      switch (err.code) {
+        case 'auth/wrong-password':
+          this.toastr.error('Your current password does not correct!');
+          break;
+        default:
+          this.toastr.error(err.message);
+          break;
+      }
+    }
   }
 }
 

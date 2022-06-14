@@ -55,6 +55,10 @@ import { TruncatePipe } from './pipes/truncate.pipe';
 import { PluralPipe } from './pipes/plural.pipe';
 import { FooterComponent } from './components/layout/footer/footer.component';
 import { ErrorFeedbackComponent } from './components/error-feedback/error-feedback.component';
+
+// Toast
+import { ToastrModule } from 'ngx-toastr';
+import { SpinnerComponent } from './components/spinner/spinner.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -90,6 +94,7 @@ import { ErrorFeedbackComponent } from './components/error-feedback/error-feedba
     EditProfileSkeletonComponent,
     FooterComponent,
     ErrorFeedbackComponent,
+    SpinnerComponent,
   ],
   imports: [
     BrowserModule,
@@ -112,6 +117,12 @@ import { ErrorFeedbackComponent } from './components/error-feedback/error-feedba
     BrowserAnimationsModule,
     // Auto resize input
     AutosizeModule,
+    // Toast
+    ToastrModule.forRoot({
+      timeOut: 3000, // 3 seconds
+      positionClass: 'toast-bottom-center',
+      preventDuplicates: true,
+    }),
   ],
   providers: [AuthService, PostService],
   bootstrap: [AppComponent],

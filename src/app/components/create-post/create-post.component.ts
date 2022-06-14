@@ -6,8 +6,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { faClose, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { first, Subscription, take } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 import { PostService } from 'src/app/services/post.service';
 import { UtilService } from 'src/app/services/util.service';
+import { User } from 'src/app/types/user';
 
 @Component({
   selector: 'app-create-post',
@@ -16,14 +19,18 @@ import { UtilService } from 'src/app/services/util.service';
 })
 export class CreatePostComponent implements OnInit {
   isLoading: boolean = false;
+  loadingSubcription!: Subscription;
+
   createPostForm!: FormGroup;
   imageSource!: string;
 
   imageError: boolean = false;
 
+  currentUser!: User;
   constructor(
     public fb: FormBuilder,
     private postService: PostService,
+    private authService: AuthService,
     private utilService: UtilService
   ) {
     this.createPostForm = this.fb.group({
@@ -34,9 +41,16 @@ export class CreatePostComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.postService.isLoading.subscribe((status) => {
+    this.loadingSubcription = this.postService.isLoading.subscribe((status) => {
       this.isLoading = status;
     });
+    this.authService.userObserver.subscribe((user) => {
+      this.currentUser = user;
+    });
+  }
+
+  ngOnDestroy() {
+    this.loadingSubcription.unsubscribe();
   }
 
   get title() {

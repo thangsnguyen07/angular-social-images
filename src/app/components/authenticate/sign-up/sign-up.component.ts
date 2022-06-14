@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
-  FormControl,
+  FormBuilder,
   FormGroup,
-  ValidationErrors,
-  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 import { AuthService } from 'src/app/services/auth.service';
+import Validation from 'src/utils/utils';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,52 +18,39 @@ import { AuthService } from 'src/app/services/auth.service';
 export class SignUpComponent implements OnInit {
   signUpForm!: FormGroup;
 
-  constructor(private authService: AuthService) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.signUpForm = new FormGroup(
+    this.signUpForm = this.fb.group(
       {
-        email: new FormControl('', [
-          Validators.pattern(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          ),
-          Validators.required,
-        ]),
-        password: new FormControl('', [
-          Validators.required,
-          Validators.minLength(6),
-        ]),
-        confirmPassword: new FormControl('', [Validators.required]),
+        email: [
+          '',
+          [
+            Validators.pattern(
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            ),
+            Validators.required,
+          ],
+        ],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', [Validators.required]],
       },
-      { validators: passwordMatchingValidatior }
+      { validators: [Validation.match('password', 'confirmPassword')] }
     );
   }
 
-  get email() {
-    return <FormControl>this.signUpForm.get('email');
-  }
-  get password() {
-    return <FormControl>this.signUpForm.get('password');
-  }
-  get confirmPassword() {
-    return <FormControl>this.signUpForm.get('confirmPassword');
+  get f(): { [key: string]: AbstractControl } {
+    return this.signUpForm.controls;
   }
 
   onSubmit() {
-    this.authService.signUp(this.signUpForm.value);
+    if (this.signUpForm.valid) {
+      this.authService.signUp(this.signUpForm.value);
+    } else {
+      this.signUpForm.markAllAsTouched();
+    }
   }
 
   faFacebook = faFacebook;
   faGoogle = faGoogle;
 }
-
-const passwordMatchingValidatior: ValidatorFn = (
-  control: AbstractControl
-): ValidationErrors | null => {
-  const password = control.get('password');
-  const confirmPassword = control.get('confirmPassword');
-
-  return password?.value === confirmPassword?.value
-    ? null
-    : { notmatched: true };
-};

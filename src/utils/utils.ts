@@ -16,3 +16,11 @@ export default class Validation {
     };
   }
 }
+
+export class Util {
+  static generateRandomString(characters: number) {
+    return Math.random()
+      .toString(36)
+      .slice(2, characters + 2);
+  }
+}
