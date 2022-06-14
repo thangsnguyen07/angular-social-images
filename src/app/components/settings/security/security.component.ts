@@ -19,6 +19,8 @@ import Validation from 'src/utils/utils';
 export class SecurityComponent implements OnInit {
   passwordForm!: FormGroup;
 
+  isLoading: boolean = false;
+
   constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -26,21 +28,21 @@ export class SecurityComponent implements OnInit {
       {
         currentPassword: ['', Validators.required],
         newPassword: ['', [Validators.required, Validators.minLength(6)]],
-        confirmNewPassword: [
-          '',
-          [Validators.required, Validators.minLength(6)],
-        ],
+        confirmNewPassword: ['', [Validators.required]],
       },
       { validators: [Validation.match('newPassword', 'confirmNewPassword')] }
     );
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     if (this.passwordForm.valid) {
-      this.authService.changePassword(
+      this.isLoading = true;
+      await this.authService.changePassword(
         this.f['currentPassword'].value,
         this.f['newPassword'].value
       );
+      this.isLoading = false;
+      this.passwordForm.reset();
     }
   }
 

@@ -17,6 +17,7 @@ import { NotificationService } from './notification.service';
 import { NotificationState } from '../types/notification';
 import { FirestoreService } from './firestore.service';
 import { UtilService } from './util.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,7 @@ export class PostService {
     private authService: AuthService,
     private notificationService: NotificationService,
     private firestoreService: FirestoreService,
+    private toastr: ToastrService,
     private router: Router
   ) {
     this.postsCollection = this.afs.collection('posts');
@@ -68,27 +70,31 @@ export class PostService {
   createPost(postData: any) {
     this.isLoading.next(true);
 
-    this.utilService.createImageUrl(postData.image).subscribe((result: any) => {
-      // create user reference
-      const userRef: DocumentReference<any> = this.afs
-        .collection('users')
-        .doc(this.authService.currentUser?.uid).ref;
+    this.utilService
+      .createImageUrl(postData.image)
+      .subscribe(async (result: any) => {
+        // create user reference
+        const userRef: DocumentReference<any> = this.afs
+          .collection('users')
+          .doc(this.authService.currentUser?.uid).ref;
 
-      const newPost: Post = {
-        id: this.afs.createId(),
-        imageId: result.public_id,
-        imageUrl: result.secure_url,
-        createdAt: Date.now(),
-        title: postData.title,
-        description: postData.description ?? '',
-        userRef: userRef,
-      };
+        const newPost: Post = {
+          id: this.afs.createId(),
+          imageId: result.public_id,
+          imageUrl: result.secure_url,
+          createdAt: Date.now(),
+          title: postData.title,
+          description: postData.description ?? '',
+          userRef: userRef,
+        };
 
-      this.postsCollection.doc(newPost.id).set(newPost);
-      this.isLoading.next(false);
+        await this.postsCollection.doc(newPost.id).set(newPost);
+        this.isLoading.next(false);
 
-      this.router.navigateByUrl(`post/${newPost.id}`);
-    });
+        this.toastr.success('Create new post successfully!');
+
+        this.router.navigateByUrl(`post/${newPost.id}`);
+      });
   }
 
   async deletePost(post: Post) {
@@ -97,7 +103,9 @@ export class PostService {
   }
 
   async editPost(postId: string, editData: any) {
+    this.isLoading.next(true);
     await this.postsCollection.doc(postId).update(editData);
+    this.isLoading.next(false);
   }
 
   downloadImage(imageUrl: string, imageName: string): void {

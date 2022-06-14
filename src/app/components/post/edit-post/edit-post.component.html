@@ -1,6 +1,6 @@
 <form [formGroup]="editPostForm" (ngSubmit)="handleSubmit()">
   <div
-    class="mx-4 fixed z-50 left-0 right-0 md:mx-auto top-10 h-[650px] bg-white md:w-[700px] rounded-3xl overflow-hidden flex flex-col"
+    class="mx-4 fixed z-60 left-0 right-0 md:mx-auto top-10 h-[650px] bg-white md:w-[700px] rounded-3xl overflow-hidden flex flex-col"
   >
     <!-- header -->
     <div class="relative py-6 mx-6">
@@ -16,16 +16,22 @@
     <div class="px-2 grow">
       <div class="flex px-4 mt-2 space-x-5">
         <div class="space-y-4 flex-3">
-          <div class="grid items-center grid-cols-3">
+          <fieldset
+            [disabled]="isLoading"
+            class="grid items-center grid-cols-3"
+          >
             <div class="font-semibold">Title</div>
             <input
               formControlName="title"
               class="col-span-2 form-control !rounded-xl !py-2"
               type="text"
             />
-          </div>
+          </fieldset>
 
-          <div class="grid items-center grid-cols-3">
+          <fieldset
+            [disabled]="isLoading"
+            class="grid items-center grid-cols-3"
+          >
             <div class="font-semibold">Description</div>
 
             <div
@@ -38,7 +44,7 @@
                 class="w-full outline-none resize-none"
               ></textarea>
             </div>
-          </div>
+          </fieldset>
         </div>
         <div class="flex-1">
           <img class="rounded-lg" src="{{ post?.imageUrl }}" alt="" />
@@ -48,33 +54,39 @@
 
     <!-- footer -->
     <div class="py-4 mx-6">
-      <div class="flex justify-between">
-        <button
-          (click)="handleDelete()"
-          class="px-5 py-3 font-semibold text-black bg-gray-100 rounded-3xl hover:bg-gray-200 active:scale-95"
-        >
-          Delete
-        </button>
-
-        <div class="flex space-x-3">
+      <div
+        [ngClass]="isLoading ? 'justify-center' : 'justify-between'"
+        class="flex"
+      >
+        <app-spinner *ngIf="isLoading; else buttonGroup"></app-spinner>
+        <ng-template #buttonGroup>
           <button
-            (click)="handleClose()"
+            (click)="handleDelete()"
             class="px-5 py-3 font-semibold text-black bg-gray-100 rounded-3xl hover:bg-gray-200 active:scale-95"
           >
-            Cancel
+            Delete
           </button>
-          <button
-            class="px-5 py-3 font-semibold text-white bg-orange-500 rounded-3xl hover:bg-orange-600 active:scale-95"
-          >
-            Save
-          </button>
-        </div>
+
+          <div class="flex space-x-3">
+            <button
+              (click)="handleClose()"
+              class="px-5 py-3 font-semibold text-black bg-gray-100 rounded-3xl hover:bg-gray-200 active:scale-95"
+            >
+              Cancel
+            </button>
+            <button
+              class="px-5 py-3 font-semibold text-white bg-orange-500 rounded-3xl hover:bg-orange-600 active:scale-95"
+            >
+              Save
+            </button>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
 </form>
 <!-- overlay -->
 <div
-  class="fixed inset-0 z-40 h-full bg-black/50"
+  class="fixed inset-0 z-50 h-full bg-black/50"
   (click)="handleClose()"
 ></div>

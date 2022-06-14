@@ -46,12 +46,14 @@
             <div class="flex items-center mt-2 space-x-2">
               <img
                 class="object-cover w-10 h-10 rounded-full cursor-pointer"
-                src="https://m.media-amazon.com/images/I/81tpy7oo+EL._SS500_.jpg"
+                [src]="currentUser?.avatar"
                 alt=""
               />
               <div class="flex flex-col cursor-pointer">
-                <span class="font-semibold">Thang Nguyen</span>
-                <span class="text-sm">@ndth4ng</span>
+                <span class="font-semibold">{{
+                  currentUser?.displayName ?? currentUser?.username!
+                }}</span>
+                <span class="text-sm">@{{ currentUser?.username }}</span>
               </div>
             </div>
 
@@ -81,13 +83,16 @@
                 </fieldset>
               </div>
 
-              <div class="mt-10 text-center">
-                <button
-                  [disabled]="createPostForm.invalid || isLoading"
-                  class="btn btn-primary"
-                >
-                  Create
-                </button>
+              <div class="flex items-center justify-center mt-10 text-center">
+                <app-spinner *ngIf="isLoading; else button"></app-spinner>
+                <ng-template #button>
+                  <button
+                    [disabled]="createPostForm.invalid || isLoading"
+                    class="btn btn-primary"
+                  >
+                    Create
+                  </button>
+                </ng-template>
               </div>
             </div>
           </div>

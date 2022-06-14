@@ -19,6 +19,7 @@
             class="relative px-3 py-2 font-semibold bg-orange-100 rounded-3xl hover:bg-orange-200 active:scale-95"
           >
             <input
+              [disabled]="isLoading"
               class="absolute top-0 left-0 w-full h-full opacity-0"
               type="file"
               (change)="showPreview($event)"
@@ -31,18 +32,18 @@
       </div>
 
       <div class="flex mt-4">
-        <div class="flex-1 form-group">
+        <fieldset [disabled]="isLoading" class="flex-1 form-group">
           <label class="text-sm" for="displayName">Display name</label>
           <input
             formControlName="displayName"
             id="displayName"
             class="form-control"
           />
-        </div>
+        </fieldset>
       </div>
 
       <div class="mt-2">
-        <div class="form-group">
+        <fieldset [disabled]="isLoading" class="form-group">
           <label class="text-sm" for="bio">Bio</label>
           <textarea
             formControlName="bio"
@@ -50,11 +51,11 @@
             rows="3"
             class="form-control"
           ></textarea>
-        </div>
+        </fieldset>
       </div>
 
       <div class="mt-2">
-        <div class="form-group">
+        <fieldset [disabled]="isLoading" class="form-group">
           <label class="text-sm" for="username">Username</label>
           <input
             formControlName="username"
@@ -65,16 +66,19 @@
           <span *ngIf="isUsernameExist" class="text-sm text-red-500"
             >This username is already exist.</span
           >
-        </div>
+        </fieldset>
       </div>
 
-      <div class="mt-2 text-center">
-        <button
-          [disabled]="editUserForm.invalid"
-          class="outline-none btn btn-primary"
-        >
-          Save
-        </button>
+      <div class="flex items-center justify-center mt-2 text-center">
+        <app-spinner *ngIf="isLoading; else button"></app-spinner>
+        <ng-template #button>
+          <button
+            [disabled]="editUserForm.invalid"
+            class="outline-none btn btn-primary"
+          >
+            Save
+          </button>
+        </ng-template>
       </div>
     </form>
   </ng-template>

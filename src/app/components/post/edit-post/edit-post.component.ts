@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { Subscription } from 'rxjs';
 import { PostService } from 'src/app/services/post.service';
 import { Post } from 'src/app/types/post';
 
@@ -22,6 +23,7 @@ export class EditPostComponent implements OnInit {
   editPostForm!: FormGroup;
 
   isLoading: boolean = false;
+  loadingSubcription!: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -39,6 +41,13 @@ export class EditPostComponent implements OnInit {
       title: this.post?.title,
       description: this.post?.description,
     });
+    this.loadingSubcription = this.postService.isLoading.subscribe((status) => {
+      this.isLoading = status;
+    });
+  }
+
+  ngOnDestroy() {
+    this.loadingSubcription.unsubscribe();
   }
 
   handleClose() {
@@ -53,9 +62,9 @@ export class EditPostComponent implements OnInit {
     this.router.navigateByUrl('/');
   }
 
-  handleSubmit() {
+  async handleSubmit() {
     if (this.editPostForm.valid) {
-      this.postService.editPost(this.post!.id, this.editPostForm.value);
+      await this.postService.editPost(this.post!.id, this.editPostForm.value);
 
       // Close modal
       this.handleClose();

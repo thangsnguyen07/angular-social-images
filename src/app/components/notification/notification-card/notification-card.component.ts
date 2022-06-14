@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification, NotificationState } from 'src/app/types/notification';
 
@@ -9,6 +9,8 @@ import { Notification, NotificationState } from 'src/app/types/notification';
 })
 export class NotificationCardComponent implements OnInit {
   @Input() notification!: Notification;
+  @Output() onNotificationClick: EventEmitter<void> = new EventEmitter();
+
   StateType = NotificationState;
   constructor(private notificationService: NotificationService) {}
 
@@ -19,5 +21,7 @@ export class NotificationCardComponent implements OnInit {
       this.notification.userSend!,
       this.notification.post
     );
+
+    this.onNotificationClick.emit();
   }
 }

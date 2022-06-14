@@ -83,10 +83,13 @@
       </div>
     </div>
 
-    <div class="mt-1 text-center">
-      <button [disabled]="passwordForm.invalid" class="btn btn-primary">
-        Save
-      </button>
+    <div class="flex items-center justify-center mt-1 text-center">
+      <app-spinner *ngIf="isLoading; else button"></app-spinner>
+      <ng-template #button>
+        <button [disabled]="passwordForm.invalid" class="btn btn-primary">
+          Save
+        </button>
+      </ng-template>
     </div>
   </form>
 </div>

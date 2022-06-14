@@ -3,7 +3,6 @@ import {
   AngularFirestore,
   DocumentReference,
 } from '@angular/fire/compat/firestore';
-import firebase from 'firebase/compat';
 import { NotificationState } from '../types/notification';
 import { User } from '../types/user';
 import { AuthService } from './auth.service';
