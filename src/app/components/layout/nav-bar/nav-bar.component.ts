@@ -14,6 +14,10 @@ export class NavBarComponent implements OnInit {
   isOpenNotification: boolean = false;
   notificationClick: boolean = false;
 
+  isOpenSearch: boolean = false;
+  searchClick: boolean = false;
+  searchQuery!: string;
+
   notificationBadge: number = 0;
 
   currentUser: any;
@@ -28,6 +32,13 @@ export class NavBarComponent implements OnInit {
         this.isOpenNotification = false;
       }
       this.notificationClick = false;
+
+      if (!this.searchClick) {
+        this.isOpenSearch = false;
+      } else {
+        this.isOpenSearch = true;
+        this.searchClick = false;
+      }
     });
 
     this.authService.isAuth.subscribe((status) => {
@@ -53,6 +64,10 @@ export class NavBarComponent implements OnInit {
     this.isOpenSidebar = !this.isOpenSidebar;
   }
 
+  // toggleSearchModal(value: boolean) {
+  //   this.isOpenSearch = value;
+  // }
+
   signOut() {
     this.authService.signOut();
   }
@@ -67,6 +82,14 @@ export class NavBarComponent implements OnInit {
   }
   preventCloseOnClick() {
     this.notificationClick = true;
+  }
+
+  // Search
+  toggleSearch() {
+    this.isOpenSearch = !this.isOpenSearch;
+  }
+  preventCloseSearchClick() {
+    this.searchClick = true;
   }
 
   faBars = faBars;

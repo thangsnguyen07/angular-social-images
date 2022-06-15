@@ -1,0 +1,9 @@
+<div>
+  <div class="mb-2 font-semibold">{{ title }}</div>
+  <div class="grid grid-cols-4 grid-rows-2 gap-3">
+    <app-keyword-card
+      *ngFor="let keyword of keywords"
+      [keyword]="keyword"
+    ></app-keyword-card>
+  </div>
+</div>
