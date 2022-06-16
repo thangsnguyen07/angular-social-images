@@ -113,9 +113,17 @@ export class PostService {
   }
 
   async editPost(postId: string, editData: any) {
-    this.isLoading.next(true);
-    await this.postsCollection.doc(postId).update(editData);
-    this.isLoading.next(false);
+    try {
+      this.isLoading.next(true);
+      editData.keywords = Util.splitString(editData.keywords, ',');
+      await this.postsCollection.doc(postId).update(editData);
+
+      this.toastr.success('Update post successfully!');
+    } catch (err: any) {
+      this.toastr.error(err.message);
+    } finally {
+      this.isLoading.next(false);
+    }
   }
 
   downloadImage(imageUrl: string, imageName: string): void {

@@ -93,6 +93,10 @@
                     "
                   >
                     <app-error-feedback
+                      *ngIf="f['keywords'].errors?.['required']"
+                      message="Please enter some keywords related to post"
+                    ></app-error-feedback>
+                    <app-error-feedback
                       *ngIf="f['keywords'].errors?.['pattern']"
                       message="Valid character (a-z, A-Z, 0-9 and ,)"
                     ></app-error-feedback>

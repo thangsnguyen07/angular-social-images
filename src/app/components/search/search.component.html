@@ -4,10 +4,11 @@
       <div class="mb-1 font-medium">Recent:</div>
       <div class="flex space-x-2">
         <div
+          (click)="searchWithKeyword(search)"
           *ngFor="let search of recentSearch"
           class="px-5 py-2 bg-orange-200 cursor-pointer hover:bg-orange-300 rounded-3xl"
         >
-          <div (click)="searchWithKeyword(search)" class="font-semibold">
+          <div class="font-semibold">
             {{ search }}
           </div>
         </div>
