@@ -48,6 +48,14 @@ export class PostService {
     return this.afs.doc<Post>(`posts/${id}`).valueChanges();
   }
 
+  getPostsByKeyword(keyword: string) {
+    return this.afs
+      .collection('posts', (ref) =>
+        ref.where('keywords', 'array-contains', keyword)
+      )
+      .stateChanges();
+  }
+
   async populatePost(post: Post): Promise<Post> {
     const response: any = await post.userRef.get();
     const user: DocumentData | undefined = response.data();

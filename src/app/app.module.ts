@@ -63,6 +63,7 @@ import { SearchComponent } from './components/search/search.component';
 import { KeywordsComponent } from './components/keywords/keywords.component';
 import { KeywordCardComponent } from './components/keywords/keyword-card/keyword-card.component';
 import { KeywordsSkeletonComponent } from './components/skeletons/keywords-skeleton/keywords-skeleton.component';
+import { SearchPageComponent } from './components/search-page/search-page.component';
 @NgModule({
   declarations: [
     // Custom Pipes
@@ -104,6 +105,7 @@ import { KeywordsSkeletonComponent } from './components/skeletons/keywords-skele
     KeywordsComponent,
     KeywordCardComponent,
     KeywordsSkeletonComponent,
+    SearchPageComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { first } from 'rxjs';
 import { SearchService } from 'src/app/services/search.service';
 
@@ -8,22 +9,47 @@ import { SearchService } from 'src/app/services/search.service';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
+  @Output() onKeywordClick: EventEmitter<void> = new EventEmitter();
   keywords: any = [];
+  recentSearch: string[] = [];
 
   isFetch: boolean = false;
 
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit(): void {
     this.searchService
-      .getKeywords()
+      .getRecentSearchKeywords()
       .pipe(first())
       .subscribe((result) => {
-        result.forEach((item) => {
-          this.keywords.push(item.payload.doc.data());
-        });
+        if (result.length > 0) {
+          const searchData: any = result[0].payload.doc.data();
+          const listSearch: string[] = [];
+          searchData.keywords.forEach((keyword: string) => {
+            listSearch.push(keyword);
+          });
 
-        this.isFetch = true;
+          // max recent search
+          const maxRecentSearch = 5;
+          this.recentSearch = listSearch.slice(0, maxRecentSearch);
+        }
       });
+
+    this.searchService.getKeywords().subscribe((result) => {
+      result.forEach((item) => {
+        this.keywords.push(item.data());
+      });
+
+      this.isFetch = true;
+    });
+  }
+
+  searchWithKeyword(keyword: string) {
+    this.router.navigateByUrl(`/search?kq=${keyword}`);
+    this.onKeywordClick.emit();
+  }
+
+  closeSearchModal() {
+    this.onKeywordClick.emit();
   }
 }

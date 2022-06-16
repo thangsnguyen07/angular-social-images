@@ -2,7 +2,7 @@
   <nav class="flex items-center justify-between flex-none w-full">
     <div
       class="text-3xl font-bold text-orange-500 cursor-pointer"
-      routerLink="/"
+      (click)="navigateHome()"
     >
       Imagesio
     </div>
@@ -12,8 +12,11 @@
       <div class="md:w-full">
         <div class="relative flex w-full overflow-hidden input-group">
           <input
-            (click)="toggleSearch(); preventCloseSearchClick()"
+            #search
+            (click)="preventCloseSearchClick()"
+            (focus)="isOpenSearch = true"
             [(ngModel)]="searchQuery"
+            (keydown.enter)="handleSearch()"
             [ngClass]="
               searchQuery && searchQuery.length > 0
                 ? 'rounded-r-none'
@@ -25,6 +28,7 @@
             aria-label="Search"
           />
           <button
+            (click)="handleSearch()"
             *ngIf="searchQuery && searchQuery.length > 0"
             class="flex items-center w-[80px] justify-center flex-none px-6 py-4 text-xs font-medium leading-tight text-white uppercase transition duration-150 ease-in-out bg-orange-500 rounded rounded-l-none shadow-md rounded-r-3xl btn hover:bg-orange-600 hover:shadow-lg focus:bg-orange-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-orange-700 active:shadow-lg"
             type="button"
@@ -113,9 +117,16 @@
 ></app-notification>
 
 <!-- Search modal -->
-<app-search *ngIf="true" (click)="preventCloseSearchClick()"></app-search>
+<app-search
+  *ngIf="isOpenSearch"
+  (click)="preventCloseSearchClick()"
+  (onKeywordClick)="isOpenSearch = false"
+></app-search>
 <!-- *ngIf="isOpenSearch " -->
 
 <!-- overlay when search is open-->
-<div *ngIf="true" class="fixed inset-0 z-40 w-full h-full bg-black/50"></div>
+<div
+  *ngIf="isOpenSearch"
+  class="fixed inset-0 z-40 w-full h-full bg-black/50"
+></div>
 <!-- *ngIf="isOpenSearch " -->

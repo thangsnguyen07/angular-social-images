@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-keywords',
@@ -8,11 +9,20 @@ import { Component, Input, OnInit } from '@angular/core';
 export class KeywordsComponent implements OnInit {
   @Input() title!: string;
   @Input() keywords: any = [];
-  constructor() {}
+
+  @Output() onKeywordClick: EventEmitter<void> = new EventEmitter();
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.shuffleArray(this.keywords);
     this.keywords = this.keywords.slice(0, 8);
+  }
+
+  searchKeyword(keyword: any) {
+    const queryString = keyword.title.toLowerCase();
+    this.router.navigateByUrl(`/search?kq=${queryString}`);
+
+    this.onKeywordClick.emit();
   }
 
   shuffleArray(array: any) {
