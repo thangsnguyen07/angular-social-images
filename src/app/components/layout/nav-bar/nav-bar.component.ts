@@ -1,8 +1,16 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/types/notification';
+import { Util } from 'src/utils/utils';
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,9 +18,14 @@ import { Notification } from 'src/app/types/notification';
   styleUrls: ['./nav-bar.component.scss'],
 })
 export class NavBarComponent implements OnInit {
+  @ViewChild('search') searchElement!: ElementRef;
   isOpenSidebar: boolean = false;
   isOpenNotification: boolean = false;
   notificationClick: boolean = false;
+
+  isOpenSearch: boolean = false;
+  searchClick: boolean = false;
+  searchQuery!: string;
 
   notificationBadge: number = 0;
 
@@ -21,6 +34,7 @@ export class NavBarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private notificationService: NotificationService,
+    private router: Router,
     private renderer: Renderer2
   ) {
     this.renderer.listen('window', 'click', (e: Event) => {
@@ -28,6 +42,13 @@ export class NavBarComponent implements OnInit {
         this.isOpenNotification = false;
       }
       this.notificationClick = false;
+
+      if (!this.searchClick) {
+        this.isOpenSearch = false;
+      } else {
+        this.isOpenSearch = true;
+        this.searchClick = false;
+      }
     });
 
     this.authService.isAuth.subscribe((status) => {
@@ -67,6 +88,27 @@ export class NavBarComponent implements OnInit {
   }
   preventCloseOnClick() {
     this.notificationClick = true;
+  }
+
+  // Search
+  toggleSearch() {
+    this.isOpenSearch = !this.isOpenSearch;
+  }
+  preventCloseSearchClick() {
+    this.searchClick = true;
+  }
+
+  handleSearch() {
+    this.searchQuery = Util.removeSpace(this.searchQuery); // Remove unnecessary space
+    this.router.navigateByUrl(`/search?kq=${this.searchQuery}`);
+    this.isOpenSearch = false;
+    // unfocus input
+    this.searchElement.nativeElement.blur();
+  }
+
+  navigateHome() {
+    this.searchQuery = '';
+    this.router.navigateByUrl('/');
   }
 
   faBars = faBars;

@@ -8,6 +8,7 @@ export interface Post {
   description: string;
   imageUrl: string;
   imageId: string;
+  keywords?: string[];
   createdAt: number;
   userRef: DocumentReference;
   author?: User;

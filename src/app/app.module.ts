@@ -59,8 +59,19 @@ import { ErrorFeedbackComponent } from './components/error-feedback/error-feedba
 // Toast
 import { ToastrModule } from 'ngx-toastr';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { SearchComponent } from './components/search/search.component';
+import { KeywordsComponent } from './components/keywords/keywords.component';
+import { KeywordCardComponent } from './components/keywords/keyword-card/keyword-card.component';
+import { KeywordsSkeletonComponent } from './components/skeletons/keywords-skeleton/keywords-skeleton.component';
+import { SearchPageComponent } from './components/search-page/search-page.component';
 @NgModule({
   declarations: [
+    // Custom Pipes
+    DateAgoPipe,
+    TruncatePipe,
+    PluralPipe,
+
+    //  Components
     AppComponent,
     HomeComponent,
     SignInComponent,
@@ -84,17 +95,17 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     SecurityComponent,
     CreatePostComponent,
     EditPostComponent,
-
-    // Custom Pipes
-    DateAgoPipe,
-    TruncatePipe,
-    PluralPipe,
     ProfileSkeletonComponent,
     PostSkeletonComponent,
     EditProfileSkeletonComponent,
     FooterComponent,
     ErrorFeedbackComponent,
     SpinnerComponent,
+    SearchComponent,
+    KeywordsComponent,
+    KeywordCardComponent,
+    KeywordsSkeletonComponent,
+    SearchPageComponent,
   ],
   imports: [
     BrowserModule,

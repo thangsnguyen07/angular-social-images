@@ -23,4 +23,8 @@ export class Util {
       .toString(36)
       .slice(2, characters + 2);
   }
+
+  static removeSpace(str: string) {
+    return str.replace(/\s\s+/g, ' ').trim();
+  }
 }

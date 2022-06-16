@@ -18,6 +18,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { EditProfileComponent } from './components/settings/edit-profile/edit-profile.component';
 import { SecurityComponent } from './components/settings/security/security.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
+import { SearchComponent } from './components/search/search.component';
+import { SearchPageComponent } from './components/search-page/search-page.component';
 
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['sign-in']);
 const redirectLoggedInToHome = () => redirectLoggedInTo(['/']);
@@ -75,6 +77,10 @@ const routes: Routes = [
 
       { path: '**', redirectTo: 'edit-profile', pathMatch: 'full' },
     ],
+  },
+  {
+    path: 'search',
+    component: SearchPageComponent,
   },
   // { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
