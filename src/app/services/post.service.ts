@@ -1,4 +1,3 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   AngularFirestore,
@@ -8,7 +7,7 @@ import {
 } from '@angular/fire/compat/firestore';
 
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, first, map, take } from 'rxjs';
 
 import { Post } from '../types/post';
 import { User } from '../types/user';
@@ -55,6 +54,23 @@ export class PostService {
         ref.where('keywords', 'array-contains', keyword)
       )
       .stateChanges();
+  }
+
+  async getUserPosts(username: string) {
+    return this.authService
+      .getUserByUsername(username)
+      .pipe(take(1))
+      .pipe(
+        map((result) => {
+          const user: User = result[0] as User;
+          const userRef = this.firestoreService.generateUserRef(user.uid);
+
+          return this.afs
+            .collection('posts', (ref) => ref.where('userRef', '==', userRef))
+            .stateChanges();
+          // .pipe(take(1));
+        })
+      );
   }
 
   async populatePost(post: Post): Promise<Post> {
