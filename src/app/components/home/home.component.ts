@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 import { Subscription } from 'rxjs';
 import { PostService } from 'src/app/services/post.service';
 import { Post } from 'src/app/types/post';
-import { User } from 'src/app/types/user';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +27,4 @@ export class HomeComponent implements OnInit {
   ngOnDestroy() {
     this.subscription?.unsubscribe();
   }
-
-  faFlus = faPlus;
 }

@@ -1,11 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import fileDownload from 'js-file-download';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilService {
+  isFooterVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+    false
+  );
   constructor(private http: HttpClient) {}
 
   isFileImage(file: any) {
@@ -43,5 +47,9 @@ export class UtilService {
       },
       { headers: httpHeaders }
     );
+  }
+
+  toggleVisibleFootter() {
+    this.isFooterVisible.next(!this.isFooterVisible.value);
   }
 }
