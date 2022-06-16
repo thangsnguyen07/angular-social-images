@@ -1,12 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { PostService } from 'src/app/services/post.service';
 import { Post } from 'src/app/types/post';
@@ -32,14 +33,21 @@ export class EditPostComponent implements OnInit {
   ) {
     this.editPostForm = this.fb.group({
       title: [''],
+      keywords: [
+        '',
+        [Validators.required, Validators.pattern(/^[A-Za-z0-9,\s]+$/)],
+      ],
       description: ['', Validators.maxLength(300)],
     });
   }
 
   ngOnInit(): void {
+    const strKeywords = this.post?.keywords?.join(', ');
+
     this.editPostForm.patchValue({
       title: this.post?.title,
       description: this.post?.description,
+      keywords: strKeywords,
     });
     this.loadingSubcription = this.postService.isLoading.subscribe((status) => {
       this.isLoading = status;
@@ -68,16 +76,15 @@ export class EditPostComponent implements OnInit {
 
       // Close modal
       this.handleClose();
+    } else {
+      this.editPostForm.markAllAsTouched();
     }
   }
 
-  get title() {
-    return <FormControl>this.editPostForm.get('title');
-  }
-
-  get description() {
-    return <FormControl>this.editPostForm.get('description');
+  get f(): { [key: string]: AbstractControl } {
+    return this.editPostForm.controls;
   }
 
   faClose = faXmark;
+  faQuestion = faCircleQuestion;
 }

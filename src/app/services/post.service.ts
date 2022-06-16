@@ -18,6 +18,7 @@ import { NotificationState } from '../types/notification';
 import { FirestoreService } from './firestore.service';
 import { UtilService } from './util.service';
 import { ToastrService } from 'ngx-toastr';
+import { Util } from 'src/utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -91,6 +92,7 @@ export class PostService {
           imageId: result.public_id,
           imageUrl: result.secure_url,
           createdAt: Date.now(),
+          keywords: Util.splitString(postData.keywords, ','),
           title: postData.title,
           description: postData.description ?? '',
           userRef: userRef,
@@ -111,9 +113,17 @@ export class PostService {
   }
 
   async editPost(postId: string, editData: any) {
-    this.isLoading.next(true);
-    await this.postsCollection.doc(postId).update(editData);
-    this.isLoading.next(false);
+    try {
+      this.isLoading.next(true);
+      editData.keywords = Util.splitString(editData.keywords, ',');
+      await this.postsCollection.doc(postId).update(editData);
+
+      this.toastr.success('Update post successfully!');
+    } catch (err: any) {
+      this.toastr.error(err.message);
+    } finally {
+      this.isLoading.next(false);
+    }
   }
 
   downloadImage(imageUrl: string, imageName: string): void {

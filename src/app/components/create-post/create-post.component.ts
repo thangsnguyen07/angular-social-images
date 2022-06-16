@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { faClose, faUpload } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleQuestion,
+  faClose,
+  faUpload,
+} from '@fortawesome/free-solid-svg-icons';
 import { first, Subscription, take } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostService } from 'src/app/services/post.service';
@@ -26,6 +31,8 @@ export class CreatePostComponent implements OnInit {
 
   imageError: boolean = false;
 
+  keywords: string = '';
+
   currentUser!: User;
   constructor(
     public fb: FormBuilder,
@@ -36,6 +43,10 @@ export class CreatePostComponent implements OnInit {
     this.createPostForm = this.fb.group({
       image: ['', Validators.required],
       title: [''],
+      keywords: [
+        '',
+        [Validators.required, Validators.pattern(/^[A-Za-z0-9,\s]+$/)],
+      ],
       description: ['', Validators.maxLength(300)],
     });
   }
@@ -53,20 +64,13 @@ export class CreatePostComponent implements OnInit {
     this.loadingSubcription.unsubscribe();
   }
 
-  get title() {
-    return <FormControl>this.createPostForm.get('title');
-  }
-
-  get image() {
-    return <FormControl>this.createPostForm.get('image');
-  }
-
-  get description() {
-    return <FormControl>this.createPostForm.get('description');
+  get f(): { [key: string]: AbstractControl } {
+    return this.createPostForm.controls;
   }
 
   faUpload = faUpload;
   faClose = faClose;
+  faQuestion = faCircleQuestion;
 
   submit() {
     if (this.createPostForm.valid) {

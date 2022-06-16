@@ -14,7 +14,9 @@
     </div>
     <!-- body -->
     <div class="px-2 grow">
-      <div class="flex px-4 mt-2 space-x-5">
+      <div
+        class="flex flex-col px-4 mt-2 space-y-5 md:space-y-0 md:space-x-5 md:flex-row"
+      >
         <div class="space-y-4 flex-3">
           <fieldset
             [disabled]="isLoading"
@@ -45,9 +47,53 @@
               ></textarea>
             </div>
           </fieldset>
+
+          <fieldset
+            [disabled]="isLoading"
+            class="relative grid items-center grid-cols-3"
+          >
+            <div class="font-semibold">Keywords</div>
+            <input
+              formControlName="keywords"
+              class="col-span-2 form-control !rounded-xl !py-2"
+              type="text"
+            />
+            <div
+              *ngIf="
+                f['keywords'].invalid &&
+                (f['keywords'].dirty || f['keywords'].touched)
+              "
+            >
+              <app-error-feedback
+                *ngIf="f['keywords'].errors?.['required']"
+                message="Please enter some keywords related to post"
+              ></app-error-feedback>
+              <app-error-feedback
+                *ngIf="f['keywords'].errors?.['pattern']"
+                message="Please enter valid characters (a-z, A-Z, 0-9 and ,)"
+              ></app-error-feedback>
+            </div>
+            <div
+              class="absolute z-10 flex items-center justify-center w-5 h-5 right-2 top-3 has-tooltip"
+            >
+              <fa-icon
+                class="text-lg text-orange-500"
+                [icon]="faQuestion"
+              ></fa-icon>
+              <div
+                class="p-1 mr-36 text-white bg-orange-500 rounded shadow-lg tooltip w-[120px] text-center"
+              >
+                separate words with "," (Comma)
+              </div>
+            </div>
+          </fieldset>
         </div>
-        <div class="flex-1">
-          <img class="rounded-lg" src="{{ post?.imageUrl }}" alt="" />
+        <div class="flex justify-center flex-1">
+          <img
+            class="rounded-lg max-h-[300px] md:max-h-fit"
+            src="{{ post?.imageUrl }}"
+            alt=""
+          />
         </div>
       </div>
     </div>
