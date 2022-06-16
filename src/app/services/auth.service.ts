@@ -164,7 +164,9 @@ export class AuthService {
       email: user.email,
       displayName: user.displayName,
       username: randomUsername,
-      avatar: user.photoURL,
+      avatar:
+        user.photoURL ??
+        'https://res.cloudinary.com/ndth4ng/image/upload/v1655196190/SocialImages/blank-profile-picture-973460_h0cr2l.png',
       emailVerified: user.emailVerified,
     };
 
