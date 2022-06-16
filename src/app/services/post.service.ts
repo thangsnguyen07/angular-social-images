@@ -18,6 +18,7 @@ import { NotificationState } from '../types/notification';
 import { FirestoreService } from './firestore.service';
 import { UtilService } from './util.service';
 import { ToastrService } from 'ngx-toastr';
+import { Util } from 'src/utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -91,6 +92,7 @@ export class PostService {
           imageId: result.public_id,
           imageUrl: result.secure_url,
           createdAt: Date.now(),
+          keywords: Util.splitString(postData.keywords, ','),
           title: postData.title,
           description: postData.description ?? '',
           userRef: userRef,

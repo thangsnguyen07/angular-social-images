@@ -27,4 +27,12 @@ export class Util {
   static removeSpace(str: string) {
     return str.replace(/\s\s+/g, ' ').trim();
   }
+
+  static splitString(strArray: string, splitBy: string): string[] {
+    const splitedArray: string[] = strArray.trim().split(`${splitBy}`);
+    splitedArray.forEach((item, index) => {
+      splitedArray[index] = this.removeSpace(item);
+    });
+    return splitedArray;
+  }
 }
