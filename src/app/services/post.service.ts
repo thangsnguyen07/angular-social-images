@@ -73,6 +73,24 @@ export class PostService {
       );
   }
 
+  getUserLikedPosts(username: string) {
+    return this.authService
+      .getUserByUsername(username)
+      .pipe(take(1))
+      .pipe(
+        map((result) => {
+          const user: User = result[0] as User;
+          const userRef = this.firestoreService.generateUserRef(user.uid);
+
+          return this.afs
+            .collection('posts', (ref) =>
+              ref.where('likes', 'array-contains', userRef)
+            )
+            .stateChanges();
+        })
+      );
+  }
+
   async populatePost(post: Post): Promise<Post> {
     const response: any = await post.userRef.get();
     const user: DocumentData | undefined = response.data();
