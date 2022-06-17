@@ -3,6 +3,7 @@ import {
   AngularFirestore,
   DocumentReference,
 } from '@angular/fire/compat/firestore';
+import { map, Observable } from 'rxjs';
 import { Post } from '../types/post';
 import { User } from '../types/user';
 
