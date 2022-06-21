@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
-import { PostService } from 'src/app/services/post.service';
+import { PaginationService } from 'src/app/services/pagination.service';
 import { Post } from 'src/app/types/post';
 
 @Component({
@@ -10,21 +10,26 @@ import { Post } from 'src/app/types/post';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  posts: Post[] = [];
   subscription?: Subscription;
-  constructor(private postService: PostService) {}
+  constructor(public page: PaginationService) {}
 
   ngOnInit(): void {
-    this.subscription = this.postService.posts.subscribe((val) => {
-      val.forEach(async (item) => {
-        let post: Post = item.payload.doc.data();
-        const populatedPost = await this.postService.populatePost(post);
-        this.posts.push(populatedPost);
-      });
-    });
+    this.getPosts();
+  }
+
+  getPosts() {
+    this.page.init('posts', 'createdAt', { reverse: true, prepend: false });
+  }
+
+  scrollHandler(e: any) {
+    if (e === 'bottom') {
+      console.log('bottom');
+
+      this.page.more();
+    }
   }
 
   ngOnDestroy() {
-    this.subscription?.unsubscribe();
+    this.page.reset();
   }
 }

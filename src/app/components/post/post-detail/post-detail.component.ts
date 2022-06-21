@@ -54,6 +54,8 @@ export class PostDetailComponent implements OnInit {
             );
             this.post = populatedPost;
 
+            console.log(this.post);
+
             // Check if user is liked post
 
             this.post?.likes?.some(

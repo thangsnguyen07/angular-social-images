@@ -7,7 +7,7 @@ import {
 } from '@angular/fire/compat/firestore';
 
 import { Router } from '@angular/router';
-import { BehaviorSubject, first, map, take } from 'rxjs';
+import { BehaviorSubject, first, map, Observable, switchMap, take } from 'rxjs';
 
 import { Post } from '../types/post';
 import { User } from '../types/user';
@@ -47,6 +47,23 @@ export class PostService {
   getPost(id: string) {
     return this.afs.doc<Post>(`posts/${id}`).valueChanges();
   }
+
+  // getPostsNewMethod(): Observable<Post[]> {
+  //   return this.afs
+  //     .collection('posts')
+  //     .snapshotChanges()
+  //     .pipe(
+  //       switchMap(async (actions) => {
+  //         const promises = actions.map(async (item) => {
+  //           const post = item.payload.doc.data() as Post;
+  //           const populatedPost = await this.populatePost(post);
+  //           return { ...populatedPost };
+  //         });
+
+  //         return await Promise.all(promises);
+  //       })
+  //     );
+  // }
 
   getPostsByKeyword(keyword: string) {
     return this.afs
@@ -93,7 +110,7 @@ export class PostService {
 
   async populatePost(post: Post): Promise<Post> {
     const response: any = await post.userRef.get();
-    const user: DocumentData | undefined = response.data();
+    const user = response.data();
 
     const populatedPost: Post = {
       ...post,
