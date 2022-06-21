@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CommentService } from 'src/app/services/comment.service';
 import { PostService } from 'src/app/services/post.service';
@@ -21,7 +21,7 @@ export class PostComment implements OnInit {
 
   currentUser?: User;
 
-  commentSubscription!: Subscription;
+  commentSubscription = new Subject<void>();
 
   constructor(
     private postService: PostService,
@@ -33,30 +33,34 @@ export class PostComment implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: any) => {
       this.postId = params['id'];
+
+      // reset comments
+      this.comments = [];
+
+      this.postService
+        .getPostComments(this.postId!)
+        .pipe(takeUntil(this.commentSubscription))
+        .subscribe((result) => {
+          if (result) {
+            result.forEach(async (item) => {
+              // console.log(item.payload.doc.data());
+              let comment: CommentType = item.payload.doc.data() as CommentType;
+              let author: User = await this.commentService.getCommentAuthor(
+                comment.userRef
+              );
+              comment.author = author;
+
+              this.comments.push(comment);
+            });
+          }
+        });
     });
-
-    this.commentSubscription = this.postService
-      .getPostComments(this.postId!)
-      .subscribe((result) => {
-        if (result) {
-          result.forEach(async (item) => {
-            // console.log(item.payload.doc.data());
-            let comment: CommentType = item.payload.doc.data() as CommentType;
-            let author: User = await this.commentService.getCommentAuthor(
-              comment.userRef
-            );
-            comment.author = author;
-
-            this.comments.push(comment);
-          });
-        }
-      });
 
     this.currentUser = this.authService.currentUser!;
   }
 
   ngOnDestroy() {
-    this.commentSubscription.unsubscribe();
+    this.commentSubscription.next();
   }
 
   onFocus(value: boolean) {
