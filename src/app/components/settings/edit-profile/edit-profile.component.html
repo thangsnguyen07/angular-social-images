@@ -50,7 +50,14 @@
             id="bio"
             rows="3"
             class="form-control"
+            maxlength="300"
           ></textarea>
+          <div *ngIf="f['bio'].invalid && (f['bio'].dirty || f['bio'].touched)">
+            <app-error-feedback
+              *ngIf="f['bio'].errors?.['maxlength']"
+              message="Maximum characters is 300."
+            ></app-error-feedback>
+          </div>
         </fieldset>
       </div>
 
@@ -66,6 +73,29 @@
           <span *ngIf="isUsernameExist" class="text-sm text-red-500"
             >This username is already exist.</span
           >
+          <div
+            *ngIf="
+              f['username'].invalid &&
+              (f['username'].dirty || f['username'].touched)
+            "
+          >
+            <app-error-feedback
+              *ngIf="f['username'].errors?.['required']"
+              message="Username can not be empty."
+            ></app-error-feedback>
+            <app-error-feedback
+              *ngIf="f['username'].errors?.['minlength']"
+              message="Username must be at least 4 characters."
+            ></app-error-feedback>
+            <app-error-feedback
+              *ngIf="f['username'].errors?.['maxlength']"
+              message="Username cannot be longer than 20 characters."
+            ></app-error-feedback>
+            <app-error-feedback
+              *ngIf="f['username'].errors?.['pattern']"
+              message="Username is not valid (Valid characters include a-z A-Z 0-9 - . _)"
+            ></app-error-feedback>
+          </div>
         </fieldset>
       </div>
 
