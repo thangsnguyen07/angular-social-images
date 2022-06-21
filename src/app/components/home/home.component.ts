@@ -23,8 +23,6 @@ export class HomeComponent implements OnInit {
 
   scrollHandler(e: any) {
     if (e === 'bottom') {
-      console.log('bottom');
-
       this.page.more();
     }
   }

@@ -8,7 +8,7 @@ import {
   faPencil,
   faSquareArrowUpRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { PostService } from 'src/app/services/post.service';
 import { Post } from 'src/app/types/post';
@@ -30,6 +30,10 @@ export class PostDetailComponent implements OnInit {
   isEdit: boolean = false;
 
   isLoading: boolean = true;
+
+  // related posts
+  relatedPosts: Post[] = [];
+  relatedPostsSubscription = new Subject<void>();
 
   constructor(
     private postService: PostService,
@@ -54,8 +58,6 @@ export class PostDetailComponent implements OnInit {
             );
             this.post = populatedPost;
 
-            console.log(this.post);
-
             // Check if user is liked post
 
             this.post?.likes?.some(
@@ -71,12 +73,36 @@ export class PostDetailComponent implements OnInit {
 
             this.isLoading = false;
           }
+
+          // related posts
+          if (this.post?.keywords && this.post?.keywords.length > 0) {
+            this.postService
+              .getPostsByKeywords(this.post?.keywords)
+              .pipe(takeUntil(this.relatedPostsSubscription))
+              .subscribe((result) => {
+                result.forEach(async (item) => {
+                  if (item.type == 'added') {
+                    // console.log('item: ', item.payload.doc.data(), item.type);
+                    let relatedPost: Post = item.payload.doc.data() as Post;
+
+                    // not include this post
+                    if (relatedPost.id !== this.post?.id) {
+                      relatedPost = await this.postService.populatePost(
+                        relatedPost
+                      );
+                      this.relatedPosts.push(relatedPost);
+                    }
+                  }
+                });
+              });
+          }
         });
     });
   }
 
   ngOnDestroy() {
     this.postSubscription.unsubscribe();
+    this.relatedPostsSubscription.next();
   }
 
   handleDownload(): void {

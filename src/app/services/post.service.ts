@@ -73,6 +73,14 @@ export class PostService {
       .stateChanges();
   }
 
+  getPostsByKeywords(keywords: String[]) {
+    return this.afs
+      .collection('posts', (ref) =>
+        ref.where('keywords', 'array-contains-any', keywords)
+      )
+      .stateChanges();
+  }
+
   async getUserPosts(username: string) {
     return this.authService
       .getUserByUsername(username)
