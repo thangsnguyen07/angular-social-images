@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, Subject, takeUntil } from 'rxjs';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { filter, finalize, Subject, takeUntil } from 'rxjs';
 import { PostService } from 'src/app/services/post.service';
 import { Post } from 'src/app/types/post';
 
@@ -17,8 +17,17 @@ export class PostCreatedComponent implements OnInit {
 
   constructor(
     private postService: PostService,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    // When router changes => Unsubscribe
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationStart))
+      .subscribe(() => {
+        this.posts = [];
+        this.postsSubscription.next();
+      });
+  }
 
   ngOnInit(): void {
     this.route.parent!.params.subscribe(async (params) => {
@@ -37,9 +46,5 @@ export class PostCreatedComponent implements OnInit {
         });
       });
     });
-  }
-
-  ngOnDestroy() {
-    this.postsSubscription.next();
   }
 }
