@@ -22,7 +22,7 @@ export class FollowerCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isFollow = this.followService.checkFollow(this.follower.uid);
+    this.isFollow = this.followService.checkFollow(this.follower);
     this.isMe = this.followService.checkFollowSelf(this.follower.uid);
   }
 

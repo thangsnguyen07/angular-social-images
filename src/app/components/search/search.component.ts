@@ -26,7 +26,10 @@ export class SearchComponent implements OnInit {
           const searchData: any = result[0].payload.doc.data();
           const listSearch: string[] = [];
           searchData.keywords.forEach((keyword: string) => {
-            listSearch.push(keyword);
+            // not show long search string
+            if (keyword.length < 20) {
+              listSearch.push(keyword);
+            }
           });
 
           // max recent search

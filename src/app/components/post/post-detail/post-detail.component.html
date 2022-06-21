@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center py-5">
+<div *ngIf="isExist; else not_found" class="flex flex-col items-center py-5">
   <app-post-skeleton *ngIf="isLoading; else content"></app-post-skeleton>
   <ng-template #content>
     <div
@@ -46,6 +46,7 @@
 
             <!-- Copy link -->
             <div
+              (click)="handleCopy()"
               class="flex items-center justify-center w-10 h-10 transition-all duration-300 rounded-full cursor-pointer has-tooltip hover:bg-orange-300"
             >
               <fa-icon
@@ -106,9 +107,24 @@
             </div>
           </div>
 
-          <button *ngIf="!isAuthor" class="btn btn-primary !rounded-3xl">
-            Follow
-          </button>
+          <div *ngIf="!isAuthor">
+            <button
+              *ngIf="isFollow; else is_follow"
+              (click)="handleFollow()"
+              class="btn btn-primary !rounded-3xl font-semibold !bg-gray-100 hover:!bg-gray-200 !text-black"
+            >
+              Unfollow
+            </button>
+
+            <ng-template #is_follow>
+              <button
+                (click)="handleFollow()"
+                class="btn btn-primary !rounded-3xl"
+              >
+                Follow
+              </button>
+            </ng-template>
+          </div>
         </div>
         <!-- Body -->
         <div class="mt-4">
@@ -122,17 +138,20 @@
         </div>
       </div>
     </div>
+
+    <h2 class="mt-4 text-2xl font-semibold">Related posts</h2>
   </ng-template>
 
-  <h2 class="text-2xl font-semibold">Related posts</h2>
-
-  <!-- <div class="mt-4">
+  <div class="mt-4">
     <div
       class="gap-3 mx-auto space-y-3 columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-7 pb-28"
     >
-      <app-post-card *ngFor="let post of posts" [post]="post"></app-post-card>
+      <app-post-card
+        *ngFor="let post of relatedPosts"
+        [post]="post"
+      ></app-post-card>
     </div>
-  </div> -->
+  </div>
 </div>
 
 <app-edit-post
@@ -140,3 +159,7 @@
   [post]="post"
   (onClose)="handleEditPost()"
 ></app-edit-post>
+
+<ng-template #not_found>
+  <app-not-found-page></app-not-found-page>
+</ng-template>

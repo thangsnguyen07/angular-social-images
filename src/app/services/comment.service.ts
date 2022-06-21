@@ -26,7 +26,7 @@ export class CommentService {
     return res.data() as User;
   }
 
-  async writeComment(content: string, postId: string, userId: string) {
+  async writeComment(content: string, postId: string, userSendId: string) {
     // console.log(content, postId, userId);
 
     const commentId: string = this.afs.createId();
@@ -35,12 +35,13 @@ export class CommentService {
       id: commentId,
       content: content,
       postRef: this.afs.collection('posts').doc<Post>(postId).ref,
-      userRef: this.afs.collection('users').doc<User>(userId).ref,
+      userRef: this.afs.collection('users').doc<User>(userSendId).ref,
       createdAt: Date.now(),
       likes: [],
       replies: [],
     };
 
+    // add comment to post
     this.afs
       .collection('posts')
       .doc(postId)
@@ -56,12 +57,14 @@ export class CommentService {
       post.userRef
     );
 
-    // Notification
-    this.notificationService.createNotification(
-      userId, // send
-      postAuthor.uid, // receive
-      postId,
-      NotificationState.comment
-    );
+    if (userSendId != postAuthor.uid) {
+      // Notification
+      this.notificationService.createNotification(
+        userSendId, // user send id
+        postAuthor.uid, // user receive id
+        postId,
+        NotificationState.comment
+      );
+    }
   }
 }
