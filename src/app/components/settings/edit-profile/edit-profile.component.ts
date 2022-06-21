@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -39,7 +40,15 @@ export class EditProfileComponent implements OnInit {
       image: [''],
       displayName: [''],
       bio: ['', Validators.maxLength(300)],
-      username: ['', [Validators.required, Validators.maxLength(20)]],
+      username: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(20),
+          Validators.minLength(4),
+          Validators.pattern(/^[a-zA-Z0-9_.-]*$/),
+        ],
+      ],
     });
   }
 
@@ -96,18 +105,13 @@ export class EditProfileComponent implements OnInit {
         await this.authService.updateUser(editUserData);
         this.isLoading = false;
       }
+    } else {
+      this.editUserForm.markAllAsTouched();
     }
   }
 
-  get displayName() {
-    return <FormControl>this.editUserForm.get('displayName');
-  }
-
-  get bio() {
-    return <FormControl>this.editUserForm.get('bio');
-  }
-  get username() {
-    return <FormControl>this.editUserForm.get('username');
+  get f(): { [key: string]: AbstractControl } {
+    return this.editUserForm.controls;
   }
 
   showPreview(event: any) {
