@@ -37,7 +37,7 @@ export class ProfileComponent implements OnInit {
       .pipe(filter((event) => event instanceof NavigationStart))
       .subscribe(() => {
         this.userUnsubcribe.next();
-        this.userSubscription.unsubscribe();
+        this.userSubscription.next();
       });
   }
 
