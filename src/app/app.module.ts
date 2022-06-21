@@ -66,6 +66,7 @@ import { KeywordsSkeletonComponent } from './components/skeletons/keywords-skele
 import { SearchPageComponent } from './components/search-page/search-page.component';
 import { FloatingButtonsGroupComponent } from './components/floating-buttons-group/floating-buttons-group.component';
 import { ScrollableDirective } from './directives/scrollable.directive';
+import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 @NgModule({
   declarations: [
     // Custom Pipes
@@ -110,6 +111,7 @@ import { ScrollableDirective } from './directives/scrollable.directive';
     SearchPageComponent,
     FloatingButtonsGroupComponent,
     ScrollableDirective,
+    NotFoundPageComponent,
   ],
   imports: [
     BrowserModule,

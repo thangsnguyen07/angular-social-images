@@ -61,6 +61,12 @@ export class AuthService {
     return this.afFirestore.collection('users').doc(uid).valueChanges();
   }
 
+  checkUser(username: String) {
+    return this.afFirestore
+      .collection('users', (ref) => ref.where('username', '==', username))
+      .get();
+  }
+
   getUserByUsername(username: string) {
     return this.afFirestore
       .collection('users', (ref) => ref.where('username', '==', username))

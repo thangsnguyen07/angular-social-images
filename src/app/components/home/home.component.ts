@@ -10,8 +10,10 @@ import { Post } from 'src/app/types/post';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  subscription?: Subscription;
+  subscription!: Subscription;
   constructor(public page: PaginationService) {}
+
+  // posts: Post[] = [];
 
   ngOnInit(): void {
     this.getPosts();

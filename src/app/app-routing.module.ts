@@ -46,14 +46,20 @@ const routes: Routes = [
   {
     path: 'post',
     component: PostComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
     children: [{ path: ':id', component: PostDetailComponent }],
   },
   {
     path: 'create-post',
     component: CreatePostComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
   {
     path: 'profile',
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
     children: [
       { path: '', redirectTo: '/', pathMatch: 'full' },
       {
@@ -71,6 +77,8 @@ const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
     children: [
       { path: 'edit-profile', component: EditProfileComponent },
       { path: 'security', component: SecurityComponent },
@@ -81,8 +89,10 @@ const routes: Routes = [
   {
     path: 'search',
     component: SearchPageComponent,
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin },
   },
-  // { path: '**', redirectTo: '/', pathMatch: 'full' },
+  { path: '**', redirectTo: '/', pathMatch: 'full' },
 ];
 
 @NgModule({

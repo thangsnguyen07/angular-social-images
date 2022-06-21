@@ -11,7 +11,6 @@ import { Post } from 'src/app/types/post';
 export class PostCardComponent implements OnInit {
   @Input() post!: Post;
   constructor(private router: Router) {}
-
   ngOnInit(): void {}
 
   logPost() {

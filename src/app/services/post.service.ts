@@ -44,8 +44,12 @@ export class PostService {
     return this.postsCollection.stateChanges(['added']);
   }
 
+  checkPost(id: string) {
+    return this.afs.collection('posts').doc(id).get();
+  }
+
   getPost(id: string) {
-    return this.afs.doc<Post>(`posts/${id}`).valueChanges();
+    return this.afs.collection('posts').doc<Post>(id).snapshotChanges();
   }
 
   // getPostsNewMethod(): Observable<Post[]> {
@@ -64,6 +68,20 @@ export class PostService {
   //       })
   //     );
   // }
+
+  getPostOnce(postId: string) {
+    return this.afs
+      .collection('posts')
+      .doc(postId)
+      .get()
+      .pipe(
+        map((result) => {
+          return result.data();
+        })
+      );
+
+    // return postRef
+  }
 
   getPostsByKeyword(keyword: string) {
     return this.afs
@@ -187,6 +205,13 @@ export class PostService {
 
   downloadImage(imageUrl: string, imageName: string): void {
     this.utilService.downloadImage(imageUrl, imageName);
+  }
+
+  copyImageUrl(post: Post) {
+    navigator.clipboard
+      .writeText(post.imageUrl)
+      .then(() => this.toastr.success('Copied image URL to clipboard!'))
+      .catch((e) => console.error(e));
   }
 
   // REACTIONS

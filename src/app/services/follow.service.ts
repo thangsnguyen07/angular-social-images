@@ -83,12 +83,12 @@ export class FollowService {
   }
 
   // check if you follow this user
-  checkFollow(followerId: string) {
+  checkFollow(user: User) {
     let result = false;
 
-    if (this.authService.currentUser?.followings) {
-      result = this.authService.currentUser.followings.some(
-        (user) => user.id == followerId
+    if (user.followers) {
+      result = user.followers.some(
+        (follower) => follower.id == this.authService.currentUser?.uid
       );
     }
 
